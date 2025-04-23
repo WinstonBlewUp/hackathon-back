@@ -1,0 +1,4 @@
+App\Entity\Testapi:
+  testapi_{0..4}:
+    nom: <name()>
+    age: <numberBetween(18, 65)>
