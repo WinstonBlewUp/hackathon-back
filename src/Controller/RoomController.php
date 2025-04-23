@@ -19,7 +19,7 @@ final class RoomController extends AbstractController
     public function __construct(private HotelRepository $hotelRepository, private RoomRepository $roomRepository, private EntityManagerInterface $entityManager){}
 
     #[Route('/search/quiz', name: 'search_quiz', methods: ['GET'])]
-    public function searchQuiz(Request $request): Response
+    public function searchQuiz(Request $request): JsonResponse
     {
         $startDate = new \DateTime($request->query->get('startDate'));
         $endDate = new \DateTime($request->query->get('endDate'));
