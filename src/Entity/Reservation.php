@@ -36,7 +36,8 @@ class Reservation
     private ReservationEnum $status;
 
     #[ORM\ManyToOne(inversedBy: 'reservations')]
-    private ?User $user = null;
+    #[ORM\JoinColumn(name:'USR_ID',referencedColumnName:'USR_ID')]
+    private User $user;
 
     /**
      * @var Collection<int, Room>
@@ -114,12 +115,12 @@ class Reservation
         return $this;
     }
 
-    public function getUser(): ?User
+    public function getUser(): User
     {
         return $this->user;
     }
 
-    public function setUser(?User $user): static
+    public function setUser(User $user): static
     {
         $this->user = $user;
 
