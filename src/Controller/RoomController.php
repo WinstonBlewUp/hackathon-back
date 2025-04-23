@@ -58,6 +58,8 @@ final class RoomController extends AbstractController
         }else{
             $searchHistory->setUser(null);
         }
+
+        $searchHistory->setCreatedAt(new \DateTimeImmutable());
         
         $searchHistory->setParameters([
             'animal' => $request->query->get('animal'),
@@ -81,4 +83,8 @@ final class RoomController extends AbstractController
 
         return $this->json($rooms);
     }
+
+    #[Route('/search/history', name: 'search_history', methods: ['GET'])]
+    public function searchHistory(Request $request): JsonResponse
+    {}
 }

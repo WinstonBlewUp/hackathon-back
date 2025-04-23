@@ -59,6 +59,9 @@ class SearchHistory
     #[ORM\Column(name: 'SEA_MAX_GUESTS')]
     private ?int $maxGuests = null;
 
+    #[ORM\Column(type: Types::DATE_IMMUTABLE, name: 'SEA_CREATED_AT')]
+    private ?\DateTimeImmutable $createdAt = null;
+
     #[ORM\ManyToOne(inversedBy: 'searchHistories')]
     #[ORM\JoinColumn(name:'USR_ID',referencedColumnName:'USR_ID')]
     private ?User $user = null;
@@ -232,6 +235,18 @@ class SearchHistory
     public function setMaxGuests(int $maxGuests): static
     {
         $this->maxGuests = $maxGuests;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }
