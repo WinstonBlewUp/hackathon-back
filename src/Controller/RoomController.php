@@ -11,7 +11,6 @@ use Doctrine\ORM\EntityManagerInterface;
 
 use App\Repository\HotelRepository;
 use App\Repository\RoomRepository;
-use App\Entity\SearchHistory;
 
 #[Route('/api/rooms', name: 'room_')]
 final class RoomController extends AbstractController
@@ -50,41 +49,6 @@ final class RoomController extends AbstractController
             }
         }
 
-        $searchHistory = new SearchHistory();
-
-        $user = $this->getUser();
-        if($user){
-            $searchHistory->setUser($user);
-        }else{
-            $searchHistory->setUser(null);
-        }
-
-        $searchHistory->setCreatedAt(new \DateTimeImmutable());
-        
-        $searchHistory->setParameters([
-            'animal' => $request->query->get('animal'),
-            'children' => $request->query->get('children'),
-            'typeCity' => $request->query->get('typeCity'),
-            'transport' => $request->query->all('transport'),
-            'restoration' => $request->query->get('restoration'),
-            'wellness' => $request->query->all('wellness'),
-            'business' => $request->query->all('business'),
-            'comfort' => $request->query->all('comfort'),
-            'addServices' => $request->query->all('addServices'),
-            'pmr' => $request->query->get('pmr'),
-            'baby' => $request->query->get('baby'),
-            'startDate' => $startDate,
-            'endDate' => $endDate,
-            'maxGuests' => $maxGuests,
-        ]);
-
-        $this->entityManager->persist($searchHistory);
-        $this->entityManager->flush();
-
         return $this->json($rooms);
     }
-
-    #[Route('/search/history', name: 'search_history', methods: ['GET'])]
-    public function searchHistory(Request $request): JsonResponse
-    {}
 }

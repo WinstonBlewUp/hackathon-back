@@ -72,12 +72,6 @@ class User
     #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'user')]
     private Collection $reservations;
 
-    /**
-     * @var Collection<int, SearchHistory>
-     */
-    #[ORM\OneToMany(targetEntity: SearchHistory::class, mappedBy: 'user')]
-    private Collection $searchHistories;
-
     public function __construct()
     {
         $this->liked = new ArrayCollection();
@@ -85,7 +79,6 @@ class User
         $this->negociations = new ArrayCollection();
         $this->hotels = new ArrayCollection();
         $this->reservations = new ArrayCollection();
-        $this->searchHistories = new ArrayCollection();
     }
 
     public function getId(): int
@@ -315,36 +308,6 @@ class User
             // set the owning side to null (unless already changed)
             if ($reservation->getUser() === $this) {
                 $reservation->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, SearchHistory>
-     */
-    public function getSearchHistories(): Collection
-    {
-        return $this->searchHistories;
-    }
-
-    public function addSearchHistory(SearchHistory $searchHistory): static
-    {
-        if (!$this->searchHistories->contains($searchHistory)) {
-            $this->searchHistories->add($searchHistory);
-            $searchHistory->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSearchHistory(SearchHistory $searchHistory): static
-    {
-        if ($this->searchHistories->removeElement($searchHistory)) {
-            // set the owning side to null (unless already changed)
-            if ($searchHistory->getUser() === $this) {
-                $searchHistory->setUser(null);
             }
         }
 
