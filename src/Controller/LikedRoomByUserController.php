@@ -24,7 +24,21 @@ final class LikedRoomByUserController extends AbstractController
         }
         
         $roomLiked = $user->getLiked();
-        
-        return $this->json($roomLiked, 200, [], ['groups' => ['room_like', 'hotel_like']]);
+
+        $roomLikedArray = $roomLiked->toArray();
+
+        $roomLikedWithHotelDetails = array_map(function ($room) {
+            return [
+                'roomId' => $room->getId(),
+                'roomName' => $room->getName(),
+                'roomDescription' => $room->getDescription(),
+                'roomBasePrice' => $room->getBasePrice(),
+                'roomMaxGuests' => $room->getMaxGuests(),
+                'hotelId' => $room->getHotel()->getId(),
+                'hotelName' => $room->getHotel()->getName(),
+            ];
+        }, $roomLikedArray);
+
+        return $this->json($roomLikedWithHotelDetails, 200);
     }
 }
