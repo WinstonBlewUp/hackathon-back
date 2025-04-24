@@ -39,11 +39,9 @@ class Reservation
     #[ORM\JoinColumn(name:'USR_ID',referencedColumnName:'USR_ID')]
     private User $user;
 
-    /**
-     * @var Collection<int, Room>
-     */
-    #[ORM\OneToMany(targetEntity: Room::class, mappedBy: 'reservation')]
-    private Collection $rooms;
+    #[ORM\ManyToOne(inversedBy: 'reservations')]
+    #[ORM\JoinColumn(name:'ROOM_ID',referencedColumnName:'ROOM_ID')]
+    private ?Room $room = null;
 
     public function __construct()
     {
@@ -127,32 +125,14 @@ class Reservation
         return $this;
     }
 
-    /**
-     * @return Collection<int, Room>
-     */
-    public function getRooms(): Collection
+    public function getRoom(): ?Room
     {
-        return $this->rooms;
+        return $this->room;
     }
 
-    public function addRoom(Room $room): static
+    public function setRoom(?Room $room): static
     {
-        if (!$this->rooms->contains($room)) {
-            $this->rooms->add($room);
-            $room->setReservation($this);
-        }
-
-        return $this;
-    }
-
-    public function removeRoom(Room $room): static
-    {
-        if ($this->rooms->removeElement($room)) {
-            // set the owning side to null (unless already changed)
-            if ($room->getReservation() === $this) {
-                $room->setReservation(null);
-            }
-        }
+        $this->room = $room;
 
         return $this;
     }

@@ -5,6 +5,7 @@ App\Entity\Reservation:
     endDate: <dateTimeBetween('now', '+1 years')>
     price: '<numberBetween(100, 500)>'
     user: '@user_*'
+    room: '@room_*'
 
   reservation_confirmed_{1..50} (extends reservation_template):
     status: !php/const App\Enum\ReservationEnum::CONFIRMED
