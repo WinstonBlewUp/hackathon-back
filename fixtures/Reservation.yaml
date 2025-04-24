@@ -1,0 +1,13 @@
+App\Entity\Reservation:
+  reservation_template (template):
+    createdAt: <dateTimeBetween('-2 years', '-1 years')>
+    startDate: <dateTimeBetween('-1 years', 'now')>
+    endDate: <dateTimeBetween('now', '+1 years')>
+    price: '<numberBetween(100, 500)>'
+    user: '@user_*'
+
+  reservation_confirmed_{1..50} (extends reservation_template):
+    status: !php/const App\Enum\ReservationEnum::CONFIRMED
+
+  reservation_completed_{1..50} (extends reservation_template):
+    status: !php/const App\Enum\ReservationEnum::COMPLETED

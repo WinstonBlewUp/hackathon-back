@@ -1,0 +1,19 @@
+App\Entity\Negociation:
+  negociation_template (template):
+    requestedPrice: '<numberBetween(50, 500)>'
+    createdAt: <dateTimeBetween('-2 years', '-1 years')>
+    responseAt: '<($createdAt->modify("+1 day"))>'
+    challengePrice: '<(rand(0, 1) ? $requestedPrice - (10 + rand(0, 30)) : null)>'
+    user: '@user_*'
+    
+  negociation_pending_{1..50} (extends negociation_template):
+    status: !php/const App\Enum\NegociationEnum::PENDING
+
+  negociation_accepted_{1..50} (extends negociation_template):
+    status: !php/const App\Enum\NegociationEnum::ACCEPTED
+
+  negociation_rejected_{1..50} (extends negociation_template):
+    status: !php/const App\Enum\NegociationEnum::REJECTED
+  
+  negociation_expired_{1..50} (extends negociation_template):
+    status: !php/const App\Enum\NegociationEnum::EXPIRED

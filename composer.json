@@ -33,6 +33,7 @@
         "twig/twig": "*"
     },
     "require-dev": {
+        "hautelook/alice-bundle": "^2.15",
         "symfony/maker-bundle": "^1.62"
     },
     "config": {
