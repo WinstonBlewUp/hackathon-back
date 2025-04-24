@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Delete;
 use App\Repository\UserRepository;
 use App\Controller\LikedRoomByUserController;
+use App\Controller\UserExistController;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -27,7 +28,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
             controller: LikedRoomByUserController::class,
             name: 'get_user_likes',
             normalizationContext: ['groups' => ['room_like', 'hotel_like']],
-            denormalizationContext: ['groups' => ['room_like', 'hotel_like']])
+            denormalizationContext: ['groups' => ['room_like', 'hotel_like']]),
+        new Get(
+            uriTemplate: '/exist/{email}/{password}',
+            controller: UserExistController::class,
+            name: 'user_exist'),
     ]
 )]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
