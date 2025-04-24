@@ -20,6 +20,6 @@ final class LikeController extends AbstractController
 
         $roomLiked = $user->getLiked();
 
-        return $this->json($roomLiked, 200, [], ['groups' => ['room_like', 'hotel_like']]);
+        return $this->json($roomLiked, 200, [], ['groups' => ['room', 'hotel']]);
     }
 }

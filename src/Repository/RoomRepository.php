@@ -16,6 +16,25 @@ class RoomRepository extends ServiceEntityRepository
         parent::__construct($registry, Room::class);
     }
 
+    public function findAvailableRoomsByCategoryAndDates(int $categoryId, \DateTime $startDate, \DateTime $endDate)
+    {
+        $qb = $this->createQueryBuilder('room')
+            ->join('room.hotel', 'hotel')
+            ->join('hotel.categorie', 'categorie')
+            ->leftJoin('room.reservations', 'res', 'WITH', 
+                '(:startDate < res.endDate AND :endDate > res.startDate)'
+            )
+            ->where('categorie.id = :categorieId')
+            ->andWhere('res.id IS NULL')
+            ->setParameters([
+                'categorieId' => $categoryId,
+                'startDate' => $startDate,
+                'endDate' => $endDate,
+            ]);
+
+        return $qb->getQuery()->getResult();
+    }
+
     //    /**
     //     * @return Room[] Returns an array of Room objects
     //     */
