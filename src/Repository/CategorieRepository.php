@@ -16,6 +16,22 @@ class CategorieRepository extends ServiceEntityRepository
         parent::__construct($registry, Categorie::class);
     }
 
+    public function findTop3CategoriesByLikes(int $userId): array
+    {
+        return $this->createQueryBuilder('c')
+            ->select('c, COUNT(u.id) AS likesCount')
+            ->join('c.hotels', 'h')
+            ->join('h.rooms', 'r')
+            ->join('r.users', 'u')
+            ->groupBy('c.id')
+            ->orderBy('likesCount', 'DESC')
+            ->where('u.id = :userId')
+            ->setParameter('userId', $userId)
+            ->setMaxResults(3)
+            ->getQuery()
+            ->getResult();
+    }
+
     //    /**
     //     * @return Categorie[] Returns an array of Categorie objects
     //     */
