@@ -7,27 +7,14 @@ use App\Repository\CategorieRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Attribute\Group;
+use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Delete;
 
-#[ApiResource(
-    operations: [
-        new Get(),
-        new GetCollection(),
-        new Post(), 
-        new Patch(),
-        new Delete(),
-        new Get(
-            uriTemplate: '/api/categories/{id}/rooms',
-            name: "categories_rooms",
-            normalizationContext: ['groups' => ['room', 'hotel', 'category']]
-        )
-    ]
-)]
+#[ApiResource]
 #[ORM\Entity(repositoryClass: CategorieRepository::class)]
 #[ORM\Table(name: 'MTC_CATEGORIE')]
 class Categorie
@@ -35,11 +22,11 @@ class Categorie
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(name: 'CAT_ID')]
-    #[Group(['category'])]
+    #[Groups(['category'])]
     private int $id;
 
     #[ORM\Column(length: 255, name: 'CAT_LABEL')]
-    #[Group(['category'])]
+    #[Groups(['category'])]
     private string $label;
 
     /**
