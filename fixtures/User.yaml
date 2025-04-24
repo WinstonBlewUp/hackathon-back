@@ -1,0 +1,19 @@
+App\Entity\User:
+  user_{1..50}:
+    name: <lastName()>
+    firstname: <firstName()>
+    email: <email()>
+    password: <password()>
+    resetToken: <uuid()>
+    role: ['ROLE_USER']
+    created_at: <dateTimeBetween('-1 years', 'now')>
+    liked: ['@room_*', '@room_*', '@room_*']
+
+  admin:
+    name: <lastName()>
+    firstname: <firstName()>
+    email: 'admin@gmail.com'
+    password: 'admin'
+    resetToken: <uuid()>
+    role: ['ROLE_ADMIN']
+    created_at: <dateTimeBetween('-1 years', 'now')>

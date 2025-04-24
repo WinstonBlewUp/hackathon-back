@@ -1,0 +1,8 @@
+App\Entity\Room:
+  room_{1..100}:
+    name: <randomElement(['chambre 2 places', 'grande chambre', 'suite familiale'])>
+    description: <randomElement(['chambre avec vue', 'chambre avec balcon', 'chambre avec salle de bain'])>
+    basePrice: <numberBetween(100, 1000)>
+    maxGuests: <numberBetween(1, 10)>
+    hotel: '@hotel_<numberBetween(1,30)>'
+    reservation: '@reservation_*'

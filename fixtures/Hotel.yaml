@@ -1,0 +1,30 @@
+App\Entity\Hotel:
+  hotel_template (template):
+    name: <company()>
+    address: <address()>
+    city: <city()>
+    country: <country()>
+    description: <text()>
+    categorie: <randomElement(['1 étoile', '2 étoiles', '3 étoiles', '4 étoiles', '5 étoiles'])>
+    children: <boolean()>
+    animal: <boolean()>
+    transport: <randomElements(['Bus', 'Train', 'Aéroport', 'Taxi', 'Navette'], 2)>
+    wellness: <randomElements(['Spa', 'Sauna', 'Massage', 'Salle de sport'], 2)>
+    business: <randomElements(['Salle de réunion', 'Wi-Fi', 'Centre d’affaires'], 2)>
+    comfort: <randomElements(['Climatisation', 'Télévision', 'Minibar', 'Balcon'], 2)>
+    addServices: <randomElements(['Parking', 'Blanchisserie', 'Réception 24h/24'], 2)>
+    pmr: <boolean()>
+    baby: <boolean()>
+    user: '@user_<numberBetween(1,50)>'
+
+  hotel_{1..10} (extends hotel_template):
+    typeCity: !php/const App\Enum\HotelTypeCityEnum::CENTRE
+    restoration: !php/const App\Enum\HotelRestorationEnum::RESTAURANT
+
+  hotel_{11..20} (extends hotel_template):
+    typeCity: !php/const App\Enum\HotelTypeCityEnum::VILLE
+    restoration: !php/const App\Enum\HotelRestorationEnum::PENSION
+
+  hotel_{21..30} (extends hotel_template):
+    typeCity: !php/const App\Enum\HotelTypeCityEnum::CAMPAGNE
+    restoration: !php/const App\Enum\HotelRestorationEnum::PETIT
