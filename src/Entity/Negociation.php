@@ -14,6 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Enum\NegociationEnum;
 
 use App\Controller\PendingNegociationClientController;
+use App\Controller\PendingNegociationHotelierController;
 
 #[ApiResource(
     operations: [
@@ -23,8 +24,13 @@ use App\Controller\PendingNegociationClientController;
         new Patch(),
         new Delete(),
         new GetCollection(
-            uriTemplate: '/negociations/status/pending/hotelier',
+            uriTemplate: '/negociations/status/pending/client',
             controller: PendingNegociationClientController::class,
+            name: 'negociation_pending_client'
+        ),
+        new GetCollection(
+            uriTemplate: '/negociations/status/pending/hotelier',
+            controller: PendingNegociationHotelierController::class,
             name: 'negociation_pending_hotelier'
         ),
     ]
