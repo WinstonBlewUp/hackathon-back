@@ -42,10 +42,6 @@ class Hotel
     #[Group(['hotel_like'])]
     private ?string $description = null;
 
-    #[ORM\Column(length: 255, name: 'HTL_CATEGORIE')]
-    #[Group(['hotel_like'])]
-    private ?string $categorie = null;
-
     #[ORM\Column(name: 'HTL_CHILDREN')]
     #[Group(['hotel_like'])]
     private ?bool $children = null;
@@ -105,6 +101,10 @@ class Hotel
      */
     #[ORM\OneToMany(targetEntity: Threshold::class, mappedBy: 'hotel')]
     private Collection $thresholds;
+
+    #[ORM\ManyToOne(inversedBy: 'hotels')]
+    #[ORM\JoinColumn(name:'CAT_ID',referencedColumnName:'CAT_ID')]
+    private ?Categorie $categorie = null;
 
     public function __construct()
     {
@@ -173,18 +173,6 @@ class Hotel
     public function setDescription(string $description): static
     {
         $this->description = $description;
-
-        return $this;
-    }
-
-    public function getCategorie(): ?string
-    {
-        return $this->categorie;
-    }
-
-    public function setCategorie(string $categorie): static
-    {
-        $this->categorie = $categorie;
 
         return $this;
     }
@@ -389,6 +377,18 @@ class Hotel
                 $threshold->setHotel(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCategorie(): ?Categorie
+    {
+        return $this->categorie;
+    }
+
+    public function setCategorie(?Categorie $categorie): static
+    {
+        $this->categorie = $categorie;
 
         return $this;
     }
