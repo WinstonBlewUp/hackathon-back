@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Enum\HotelRestorationEnum;
 use App\Enum\HotelTypeCityEnum;
+use Symfony\Component\Validator\Attribute\Group;
 
 #[ApiResource]
 #[ORM\Entity(repositoryClass: HotelRepository::class)]
@@ -18,57 +19,71 @@ class Hotel
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(name: 'HTL_ID')]
+    #[Group(['hotel_like'])]
     private int $id;
 
     #[ORM\Column(length: 255, name: 'HTL_NAME')]
+    #[Group(['hotel_like'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255, name: 'HTL_ADRESS')]
+    #[Group(['hotel_like'])]
     private ?string $address = null;
 
     #[ORM\Column(length: 255, name: 'HTL_CITY')]
+    #[Group(['hotel_like'])]
     private ?string $city = null;
 
     #[ORM\Column(length: 255, name: 'HTL_COUNTRY')]
+    #[Group(['hotel_like'])]
     private ?string $country = null;
 
     #[ORM\Column(length: 255, name: 'HTL_DESCRIPTION')]
+    #[Group(['hotel_like'])]
     private ?string $description = null;
 
-    #[ORM\Column(length: 255, name: 'HTL_CATEGORIE')]
-    private ?string $categorie = null;
-
     #[ORM\Column(name: 'HTL_CHILDREN')]
+    #[Group(['hotel_like'])]
     private ?bool $children = null;
 
     #[ORM\Column(name: 'HTL_ANIMAL')]
+    #[Group(['hotel_like'])]
     private ?bool $animal = null;
 
     #[ORM\Column(name: 'HTL_TYPE_CITY', enumType: HotelTypeCityEnum::class)]
+    #[Group(['hotel_like'])]
     private HotelTypeCityEnum $typeCity;
 
     #[ORM\Column(length: 255, name: 'HTL_TRANSPORT')]
+    #[Group(['hotel_like'])]
     private array $transport = [];
 
     #[ORM\Column(name: 'HTL_RESTORATION', enumType: HotelRestorationEnum::class)]
+    #[Group(['hotel_like'])]
     private HotelRestorationEnum $restoration;
 
     #[ORM\Column(name: 'HTL_WELLNESS')]
+    #[Group(['hotel_like'])]
     private array $wellness = [];
 
     #[ORM\Column(name: 'HTL_BUSINESS_SERVICE')]
+    #[Group(['hotel_like'])]
     private array $business = [];
 
     #[ORM\Column(name: 'HTL_COMFORT')]
+    #[Group(['hotel_like'])]
     private array $comfort = [];
 
     #[ORM\Column(name: 'HTL_ADD_SERVICES')]
+    #[Group(['hotel_like'])]
     private array $addServices = [];
 
     #[ORM\Column(name: 'HTL_PMR')]
+    #[Group(['hotel_like'])]
     private ?bool $pmr = null;
 
     #[ORM\Column(name: 'HTL_BABY')]
+    #[Group(['hotel_like'])]
     private ?bool $baby = null;
 
     #[ORM\ManyToOne(inversedBy: 'hotels')]
@@ -86,6 +101,10 @@ class Hotel
      */
     #[ORM\OneToMany(targetEntity: Threshold::class, mappedBy: 'hotel')]
     private Collection $thresholds;
+
+    #[ORM\ManyToOne(inversedBy: 'hotels')]
+    #[ORM\JoinColumn(name:'CAT_ID',referencedColumnName:'CAT_ID')]
+    private ?Categorie $categorie = null;
 
     public function __construct()
     {
@@ -154,18 +173,6 @@ class Hotel
     public function setDescription(string $description): static
     {
         $this->description = $description;
-
-        return $this;
-    }
-
-    public function getCategorie(): ?string
-    {
-        return $this->categorie;
-    }
-
-    public function setCategorie(string $categorie): static
-    {
-        $this->categorie = $categorie;
 
         return $this;
     }
@@ -370,6 +377,18 @@ class Hotel
                 $threshold->setHotel(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCategorie(): ?Categorie
+    {
+        return $this->categorie;
+    }
+
+    public function setCategorie(?Categorie $categorie): static
+    {
+        $this->categorie = $categorie;
 
         return $this;
     }
