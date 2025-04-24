@@ -1,0 +1,15 @@
+App\Entity\Categorie:
+  categorie_1:
+    label: '1 étoile'
+
+  categorie_2:
+    label: '2 étoiles'
+
+  categorie_3:
+    label: '3 étoiles'
+
+  categorie_4:
+    label: '4 étoiles'
+
+  categorie_5:
+    label: '5 étoiles'

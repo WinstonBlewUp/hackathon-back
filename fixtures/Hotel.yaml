@@ -5,7 +5,7 @@ App\Entity\Hotel:
     city: <city()>
     country: <country()>
     description: <text()>
-    categorie: <randomElement(['1 étoile', '2 étoiles', '3 étoiles', '4 étoiles', '5 étoiles'])>
+    categorie: '@categorie_*'
     children: <boolean()>
     animal: <boolean()>
     transport: <randomElements(['Bus', 'Train', 'Aéroport', 'Taxi', 'Navette'], 2)>
