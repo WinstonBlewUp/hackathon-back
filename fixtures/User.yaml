@@ -3,7 +3,7 @@ App\Entity\User:
     name: <lastName()>
     firstname: <firstName()>
     email: <email()>
-    password: <password()>
+    password: 'userpassword'
     resetToken: <uuid()>
     role: ['ROLE_USER']
     created_at: <dateTimeBetween('-1 years', 'now')>
