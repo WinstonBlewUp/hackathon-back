@@ -3,12 +3,32 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Delete;
 use App\Repository\NegociationRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Enum\NegociationEnum;
 
-#[ApiResource]
+use App\Controller\PendingNegociationClientController;
+
+#[ApiResource(
+    operations: [
+        new Get(),
+        new GetCollection(),
+        new Post(), 
+        new Patch(),
+        new Delete(),
+        new GetCollection(
+            uriTemplate: '/negociations/status/pending/hotelier',
+            controller: PendingNegociationClientController::class,
+            name: 'negociation_pending_hotelier'
+        ),
+    ]
+)]
 #[ORM\Entity(repositoryClass: NegociationRepository::class)]
 #[ORM\Table(name: 'MTC_NEGOCIATION')]
 class Negociation

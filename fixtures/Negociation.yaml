@@ -6,14 +6,20 @@ App\Entity\Negociation:
     challengePrice: '<(rand(0, 1) ? $requestedPrice - (10 + rand(0, 30)) : null)>'
     user: '@user_*'
     
-  negociation_pending_{1..50} (extends negociation_template):
-    status: !php/const App\Enum\NegociationEnum::PENDING
-
-  negociation_accepted_{1..50} (extends negociation_template):
-    status: !php/const App\Enum\NegociationEnum::ACCEPTED
-
-  negociation_rejected_{1..50} (extends negociation_template):
-    status: !php/const App\Enum\NegociationEnum::REJECTED
+  negociation_pending_hotelier_{1..50} (extends negociation_template):
+    status: !php/const App\Enum\NegociationEnum::PENDING_HOTELIER
   
-  negociation_expired_{1..50} (extends negociation_template):
-    status: !php/const App\Enum\NegociationEnum::EXPIRED
+  negociation_pending_client_{1..50} (extends negociation_template):
+    status: !php/const App\Enum\NegociationEnum::PENDING_CLIENT
+
+  negociation_accepted_hotelier_{1..50} (extends negociation_template):
+    status: !php/const App\Enum\NegociationEnum::ACCEPTED_HOTELIER
+
+  negociation_refused_hotelier_{1..50} (extends negociation_template):
+    status: !php/const App\Enum\NegociationEnum::REFUSED_HOTELIER
+  
+  negociation_refused_client_{1..50} (extends negociation_template):
+    status: !php/const App\Enum\NegociationEnum::REFUSED_CLIENT
+  
+  negociation_refused_nodisp_{1..50} (extends negociation_template):
+    status: !php/const App\Enum\NegociationEnum::REFUSED_NO_DISP
