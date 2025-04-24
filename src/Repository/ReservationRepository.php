@@ -18,25 +18,44 @@ class ReservationRepository extends ServiceEntityRepository
 
     // Dans le repository de Reservation (ReservationRepository.php)
 
-    public function findMostFrequentMaxGuestsByUser(int $userId): int
+    public function findMostFrequentMaxGuestsByUser(int $id): int
     {
         $sql = "
             SELECT r.maxGuests, COUNT(r.maxGuests) AS freq
             FROM App\Entity\Reservation res
             JOIN res.room r
-            WHERE res.user = :userId
+            WHERE res.user = :id
             GROUP BY r.maxGuests
             ORDER BY freq DESC
         ";
 
         $query = $this->getEntityManager()->createQuery($sql);
-        $query->setParameter('userId', $userId);
+        $query->setParameter('id', $id);
 
-        $result = $query->getOneOrNullResult(); 
+        $result = $query->getResult();
 
-        return $result ? $result['maxGuests'] : 0;
+        if (!empty($result)) {
+            return $result[0]['maxGuests'];
+        }
+
+        return 0;
     }
 
+    public function isRoomAvailableById(int $id, \DateTime $startDate, \DateTime $endDate): bool
+    {
+        $qb = $this->createQueryBuilder('res')
+            ->select('COUNT(res.id)')
+            ->where('res.room = :room')
+            ->andWhere(':startDate < res.endDate')
+            ->andWhere(':endDate > res.startDate')
+            ->setParameter('room', $id)
+            ->setParameter('startDate', $startDate)
+            ->setParameter('endDate', $endDate);
+
+        $count = $qb->getQuery()->getSingleScalarResult();
+
+        return $count == 0;
+    }
 
     //    /**
     //     * @return Reservation[] Returns an array of Reservation objects

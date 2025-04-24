@@ -6,6 +6,8 @@ use App\Entity\Room;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
+use App\Entity\Hotel;
+
 /**
  * @extends ServiceEntityRepository<Room>
  */
@@ -47,7 +49,7 @@ class RoomRepository extends ServiceEntityRepository
             ->setParameter('startDate', $startDate)
             ->setParameter('endDate', $endDate)
             ->andWhere('res.id IS NULL')
-            ->andWhere('h.maxGuests = :maxGuests')
+            ->andWhere('r.maxGuests = :maxGuests')
             ->setParameter('maxGuests', $maxGuests);
 
         return $qb->getQuery()->getResult();
@@ -60,10 +62,8 @@ class RoomRepository extends ServiceEntityRepository
                 ':tonight < res.endDate AND :tomorrow > res.startDate'
             )
             ->where('res.id IS NULL')
-            ->setParameters([
-                'tonight' => $tonight,
-                'tomorrow' => $tomorrow,
-            ]);
+            ->setParameter('tonight', $tonight)
+            ->setParameter('tomorrow', $tomorrow);
 
         return $qb->getQuery()->getResult();
     }
@@ -81,15 +81,12 @@ class RoomRepository extends ServiceEntityRepository
             ->andWhere('res.id IS NULL') 
             ->andWhere('u.id IS NULL')
             ->andWhere('room.maxGuests = :maxGuests')
-            ->setParameters([
-                'categorieId' => $categoryId,
-                'userId' => $userId,
-                'maxGuests' => $mostFrequentMaxGuests,
-            ]);
+            ->setParameter('categorieId', $categoryId)
+            ->setParameter('userId', $userId)
+            ->setParameter('maxGuests', $mostFrequentMaxGuests);
 
         return $qb->getQuery()->getResult();
     }
-
 
     //    /**
     //     * @return Room[] Returns an array of Room objects

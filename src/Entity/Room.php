@@ -18,6 +18,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use App\Controller\SearchQuizController;
 use App\Controller\LastMinuteRoomController;
 use App\Controller\RecommandationRoomControlerController;
+use App\Controller\RoomAvailableController;
 
 #[ApiResource(
     operations: [
@@ -26,12 +27,17 @@ use App\Controller\RecommandationRoomControlerController;
         new Post(), 
         new Patch(),
         new Delete(),
-        new Get(
+        new Post(
             uriTemplate: '/rooms/search/quiz',
             controller: SearchQuizController::class,
             name: 'room_search_quiz',
             normalizationContext: ['groups' => ['room', 'hotel', 'category']],
             denormalizationContext: ['groups' => ['room', 'hotel', 'category']]
+        ),
+        new Post(
+            uriTemplate: '/rooms/available/{id}',
+            controller: RoomAvailableController::class,
+            name: 'room_available'
         ),
         new Get(
             uriTemplate: '/room/lastminute',
@@ -41,7 +47,7 @@ use App\Controller\RecommandationRoomControlerController;
             denormalizationContext: ['groups' => ['room', 'hotel', 'category']]
         ),
         new Get(
-            uriTemplate: '/rooms/{userId}/recommandation',
+            uriTemplate: '/rooms/{id}/recommandation',
             controller: RecommandationRoomControlerController::class,
             name: 'room_recommandation',
             normalizationContext: ['groups' => ['room', 'hotel', 'category']],

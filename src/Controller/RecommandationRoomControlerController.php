@@ -17,23 +17,23 @@ final class RecommandationRoomControlerController extends AbstractController
 {
     public function __construct(private RoomRepository $roomRepository, private CategorieRepository $categorieRepository, private ReservationRepository $reservationRepository){}
 
-    public function __invoke(int $userId): JsonResponse
+    public function __invoke(int $id): JsonResponse
     {
-        $likedCategories = $this->categorieRepository->findTopLikedCategoriesByUser($userId);
-        $reservedCategories = $this->categorieRepository->findTopReservedCategoriesByUser($userId);
+        $likedCategories = $this->categorieRepository->findTopLikedCategoriesByUser($id);
+        $reservedCategories = $this->categorieRepository->findTopReservedCategoriesByUser($id);
 
         $merged = array_merge($likedCategories, $reservedCategories);
 
         $uniqueCategories = array_map("unserialize", array_unique(array_map("serialize", $merged)));
 
-        $mostFrequentMaxGuests = $this->reservationRepository->findMostFrequentMaxGuestsByUser($userId);
+        $mostFrequentMaxGuests = $this->reservationRepository->findMostFrequentMaxGuestsByUser($id);
 
         $recommendedRooms = [];
 
         foreach ($uniqueCategories as $category) {
             $categoryId = $category->getId();
 
-            $rooms = $this->roomRepository->findAvailableRoomsByCategoryAndUser($categoryId, $userId, $mostFrequentMaxGuests);
+            $rooms = $this->roomRepository->findAvailableRoomsByCategoryAndUser($categoryId, $id, $mostFrequentMaxGuests);
 
             $rooms = array_slice($rooms, 0, 5);
 
