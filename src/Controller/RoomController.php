@@ -8,10 +8,12 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 
 use App\Repository\HotelRepository;
 use App\Repository\RoomRepository;
 
+#[AsController]
 #[Route('/api/rooms', name: 'room_')]
 final class RoomController extends AbstractController
 {

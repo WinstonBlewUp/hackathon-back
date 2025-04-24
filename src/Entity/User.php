@@ -3,12 +3,38 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Delete;
 use App\Repository\UserRepository;
+use App\Controller\LikedRoomByUserController;
+use App\Controller\UserExistController;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
-#[ApiResource]
+#[ApiResource(
+    operations: [
+        new Get(),
+        new GetCollection(),
+        new Post(), 
+        new Patch(),
+        new Delete(),
+        new Get(
+            uriTemplate: '/like/{id}',
+            controller: LikedRoomByUserController::class,
+            name: 'get_user_likes',
+            normalizationContext: ['groups' => ['room_like', 'hotel_like']],
+            denormalizationContext: ['groups' => ['room_like', 'hotel_like']]),
+        new Get(
+            uriTemplate: '/exist/{email}/{password}',
+            controller: UserExistController::class,
+            name: 'user_exist'),
+    ]
+)]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: 'MTC_USER')]
 class User
@@ -16,15 +42,19 @@ class User
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(name: 'USR_ID')]
+    #[Groups(['room_like', 'hotel_like'])]
     private int $id;
 
     #[ORM\Column(length: 30, name: 'USR_NAME')]
+    #[Groups(['room_like', 'hotel_like'])]
     private string $name;
 
     #[ORM\Column(length: 100, name: 'USR_FIRSTNAME')]
+    #[Groups(['room_like', 'hotel_like'])]
     private string $firstname;
 
     #[ORM\Column(length: 255, name: 'USR_EMAIL')]
+    #[Groups(['room_like', 'hotel_like'])]
     private ?string $email = null;
 
     #[ORM\Column(length: 255, name: 'USR_PASSWORD')]
@@ -46,6 +76,7 @@ class User
     #[ORM\JoinTable(name: 'MTC_LIKE')]
     #[ORM\JoinColumn(name: 'USR_ID', referencedColumnName: 'USR_ID', nullable: false)]
     #[ORM\InverseJoinColumn(name: 'ROOM_ID', referencedColumnName: 'ROOM_ID')]
+    #[Groups(['room_like'])]
     private Collection $liked;
 
     /**
