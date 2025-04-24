@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 #[Route('/api/like', name: 'like')]
 final class LikeController extends AbstractController
 {
-    #[Route('/', name: '')]
+    #[Route('/', name: '', methods: ['GET'])]
     public function likedRoom(): JsonResponse
     {
         $user = $this->getUser();
