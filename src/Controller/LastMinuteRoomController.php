@@ -15,7 +15,7 @@ final class LastMinuteRoomController extends AbstractController
 {
     public function __construct(private RoomRepository $roomRepository){}
 
-    public function __invoke(int $id): JsonResponse
+    public function __invoke(): JsonResponse
     {
         $now = new \DateTime();
         $tonight = (clone $now)->setTime(0, 0);

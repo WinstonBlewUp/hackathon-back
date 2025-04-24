@@ -39,12 +39,10 @@ use App\Controller\RoomAvailableController;
             controller: RoomAvailableController::class,
             name: 'room_available'
         ),
-        new Get(
+        new GetCollection(
             uriTemplate: '/room/lastminute',
             controller: LastMinuteRoomController::class,
-            name: 'room_lastminute',
-            normalizationContext: ['groups' => ['room', 'hotel', 'category']],
-            denormalizationContext: ['groups' => ['room', 'hotel', 'category']]
+            name: 'room_lastminute'
         ),
         new Get(
             uriTemplate: '/rooms/{id}/recommandation',
