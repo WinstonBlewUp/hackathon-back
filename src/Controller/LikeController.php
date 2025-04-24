@@ -7,13 +7,16 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-#[Route('/api/like', name: 'like')]
+use App\Repository\UserRepository;
+
 final class LikeController extends AbstractController
 {
-    #[Route('/', name: '', methods: ['GET'])]
-    public function likedRoom(): JsonResponse
+    public function __construct(private UserRepository $userRepository){}
+
+    #[Route('/api/like/{user_id}', name: 'like', methods: ['GET'])]
+    public function likedRoom(int $user_id): JsonResponse
     {
-        $user = $this->getUser();
+        $user = $this->userRepository->findOneBy(['id' => $user_id]);
 
         $roomLiked = $user->getLiked();
 
