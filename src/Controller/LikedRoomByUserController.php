@@ -11,18 +11,20 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
 use App\Repository\UserRepository;
 
 #[AsController]
-#[Route('/api/like', name: 'like_')]
-final class LikeController extends AbstractController
+final class LikedRoomByUserController extends AbstractController
 {
     public function __construct(private UserRepository $userRepository){}
 
-    #[Route('/{user_id}', name: 'like', methods: ['GET'])]
-    public function likedRoom(int $user_id): JsonResponse
+    public function __invoke(int $id): JsonResponse
     {
-        $user = $this->userRepository->findOneBy(['id' => $user_id]);
-
+        $user = $this->userRepository->findOneBy(['id' => $id]);
+            
+        if (!$user) {
+            throw $this->createNotFoundException('Utilisateur non trouvé');
+        }
+        
         $roomLiked = $user->getLiked();
-
+        
         return $this->json($roomLiked, 200, [], ['groups' => ['room_like', 'hotel_like']]);
     }
 }

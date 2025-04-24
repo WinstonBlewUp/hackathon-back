@@ -13,7 +13,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Attribute\Group;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ApiResource(
     operations: [
@@ -26,7 +26,7 @@ use Symfony\Component\Validator\Attribute\Group;
             uriTemplate: '/rooms/search/quiz',
             controller: 'App\Controller\RoomController::class',
             name: "search_quiz",
-            normalizationContext: ['groups' => ['room_like', 'hotel_like']],
+            normalizationContext: ['groups' => ['room_like', 'hotel_like']]
             )
     ]
 )]
@@ -37,23 +37,23 @@ class Room
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(name: 'ROOM_ID')]
-    #[Group(['room_like'])]
+    #[Groups(['room_like'])]
     private int $id;
 
     #[ORM\Column(length: 255, name: 'ROOM_NAME')]
-    #[Group(['room_like'])]
-    private ?string $name = null;
+    #[Groups(['room_like'])]
+    private string $name;
 
     #[ORM\Column(type: Types::TEXT, name: 'ROOM_DESCRIPTION')]
-    #[Group(['room_like'])]
+    #[Groups(['room_like'])]
     private ?string $description = null;
 
     #[ORM\Column(name: 'ROOM_BASE_PRICE')]
-    #[Group(['room_like'])]
+    #[Groups(['room_like'])]
     private ?int $basePrice = null;
 
     #[ORM\Column(name: 'ROOM_MAX_GUESTS')]
-    #[Group(['room_like'])]
+    #[Groups(['room_like'])]
     private ?int $maxGuests = null;
 
     /**
@@ -64,7 +64,7 @@ class Room
 
     #[ORM\ManyToOne(inversedBy: 'rooms')]
     #[ORM\JoinColumn(name:'HTL_ID',referencedColumnName:'HTL_ID')]
-    #[Group(['room_like'])]
+    #[Groups(['room_like'])]
     private ?Hotel $hotel = null;
 
     #[ORM\ManyToOne(inversedBy: 'rooms')]
