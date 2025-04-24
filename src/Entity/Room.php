@@ -9,8 +9,36 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Attribute\Group;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Delete;
 
-#[ApiResource]
+#[ApiResource(
+    operations: [
+        new Get(),
+        new GetCollection(),
+        new Post(), 
+        new Patch(),
+        new Delete(),
+        new Get(
+            uriTemplate: '/api/rooms/search/quiz',
+            name: "room_search_quiz",
+            normalizationContext: ['groups' => ['room', 'hotel', 'category']]
+        ),
+        new Get(
+            uriTemplate: 'api/room/lastminute',
+            name: "room_lastminute",
+            normalizationContext: ['groups' => ['room', 'hotel', 'category']]
+        ),
+        new Get(
+            uriTemplate: 'api/rooms/{userId}/recommandation',
+            name: "room_recommandation",
+            normalizationContext: ['groups' => ['room', 'hotel', 'category']]
+        )
+    ]
+)]
 #[ORM\Entity(repositoryClass: RoomRepository::class)]
 #[ORM\Table(name: 'MTC_ROOM')]
 class Room

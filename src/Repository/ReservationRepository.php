@@ -16,6 +16,28 @@ class ReservationRepository extends ServiceEntityRepository
         parent::__construct($registry, Reservation::class);
     }
 
+    // Dans le repository de Reservation (ReservationRepository.php)
+
+    public function findMostFrequentMaxGuestsByUser(int $userId): int
+    {
+        $sql = "
+            SELECT r.maxGuests, COUNT(r.maxGuests) AS freq
+            FROM App\Entity\Reservation res
+            JOIN res.room r
+            WHERE res.user = :userId
+            GROUP BY r.maxGuests
+            ORDER BY freq DESC
+        ";
+
+        $query = $this->getEntityManager()->createQuery($sql);
+        $query->setParameter('userId', $userId);
+
+        $result = $query->getOneOrNullResult(); 
+
+        return $result ? $result['maxGuests'] : 0;
+    }
+
+
     //    /**
     //     * @return Reservation[] Returns an array of Reservation objects
     //     */

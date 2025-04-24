@@ -76,6 +76,12 @@ class HotelRepository extends ServiceEntityRepository
                ->setParameter('baby', $criteria['baby']);
         }
 
+        if (isset($criteria['category'])) {
+            $qb->join('h.categorie', 'c')
+               ->andWhere('c.id = :categoryId')
+               ->setParameter('categoryId', $criteria['category']);
+        }
+
         return $qb->getQuery()->getResult();
     }
 

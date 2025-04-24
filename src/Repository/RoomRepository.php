@@ -53,6 +53,44 @@ class RoomRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
+    public function findAvailableRoomsForTonight($tonight, $tomorrow): array
+    {
+        $qb = $this->createQueryBuilder('room')
+            ->leftJoin('room.reservations', 'res', 'WITH', 
+                ':tonight < res.endDate AND :tomorrow > res.startDate'
+            )
+            ->where('res.id IS NULL')
+            ->setParameters([
+                'tonight' => $tonight,
+                'tomorrow' => $tomorrow,
+            ]);
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function findAvailableRoomsByCategoryAndUser(int $categoryId, int $userId, int $mostFrequentMaxGuests)
+    {
+        $qb = $this->createQueryBuilder('room')
+            ->join('room.hotel', 'hotel')
+            ->join('hotel.categorie', 'categorie')
+            ->leftJoin('room.reservations', 'res', 'WITH', 
+                'res.user = :userId' 
+            )
+            ->leftJoin('room.users', 'u', 'WITH', 'u.id = :userId')
+            ->where('categorie.id = :categorieId')
+            ->andWhere('res.id IS NULL') 
+            ->andWhere('u.id IS NULL')
+            ->andWhere('room.maxGuests = :maxGuests')
+            ->setParameters([
+                'categorieId' => $categoryId,
+                'userId' => $userId,
+                'maxGuests' => $mostFrequentMaxGuests,
+            ]);
+
+        return $qb->getQuery()->getResult();
+    }
+
+
     //    /**
     //     * @return Room[] Returns an array of Room objects
     //     */
