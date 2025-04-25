@@ -19,6 +19,7 @@ use App\Controller\SearchQuizController;
 use App\Controller\LastMinuteRoomController;
 use App\Controller\RecommandationRoomControlerController;
 use App\Controller\RoomAvailableController;
+use App\Controller\RoomSearchController;
 
 #[ApiResource(
     operations: [
@@ -51,6 +52,13 @@ use App\Controller\RoomAvailableController;
             normalizationContext: ['groups' => ['room', 'hotel', 'category']],
             denormalizationContext: ['groups' => ['room', 'hotel', 'category']]
         ),
+        new Get(
+            uriTemplate: '/rooms/search',
+            controller: RoomSearchController::class,
+            read: false,
+            name: 'room_search',
+            normalizationContext: ['groups' => ['room', 'hotel']]
+        )
     ]
 )]
 #[ORM\Entity(repositoryClass: RoomRepository::class)]

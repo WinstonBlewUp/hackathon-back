@@ -88,6 +88,16 @@ class RoomRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
+    public function searchRoomsByTerm(string $term): array
+    {
+        $qb = $this->createQueryBuilder('r')
+            ->where('r.name LIKE :term')
+            ->orWhere('r.description LIKE :term')
+            ->setParameter('term', '%' . $term . '%');
+
+        return $qb->getQuery()->getResult();
+    }
+
     //    /**
     //     * @return Room[] Returns an array of Room objects
     //     */
