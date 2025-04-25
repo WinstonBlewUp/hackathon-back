@@ -16,7 +16,7 @@ use App\Repository\RoomRepository;
 #[AsController]
 final class SearchQuizController extends AbstractController
 {
-    public function __construct(private HotelRepository $hotelRepository, private RoomRepository $roomRepository){}
+    public function __construct(private HotelRepository $hotelRepository, private RoomRepository $roomRepository) {}
 
     public function __invoke(Request $request): JsonResponse
     {
@@ -27,11 +27,10 @@ final class SearchQuizController extends AbstractController
 
 
         $maxGuests = (int) ($data['maxGuests'] ?? 0);
-        
+
         $criteriaHotel = [
             'children' => $data['children'] ?? null,
             'animal' => $data['animal'] ?? null,
-            'typeCity' => $data['typeCity'] ?? null,
             'transport' => $data['transport'] ?? [],
             'restoration' => $data['restoration'] ?? null,
             'wellness' => $data['wellness'] ?? [],
@@ -53,6 +52,14 @@ final class SearchQuizController extends AbstractController
             }
         }
 
+        // return $this->json([
+        //     'data' => $data,
+        //     'startDate' => $startDate?->format('Y-m-d'),
+        //     'endDate' => $endDate?->format('Y-m-d'),
+        //     'maxGuests' => $maxGuests,
+        //     'criteria' => $criteriaHotel,
+        // ]);
+        
         return $this->json($rooms, 200);
     }
 }

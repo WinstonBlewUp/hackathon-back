@@ -21,66 +21,66 @@ class HotelRepository extends ServiceEntityRepository
     public function findHotelByCriteria(array $criteria)
     {
         $qb = $this->createQueryBuilder('h');
+        $conditions = [];
 
         if (isset($criteria['children'])) {
-            $qb->andWhere('h.children = :children')
-                ->setParameter('children', $criteria['children']);
+            $conditions[] = 'h.children = :children';
+            $qb->setParameter('children', $criteria['children']);
         }
 
         if (isset($criteria['animal'])) {
-            $qb->andWhere('h.animal = :animal')
-                ->setParameter('animal', $criteria['animal']);
-        }
-
-        if (isset($criteria['typeCity'])) {
-            $qb->andWhere('h.typeCity = :typeCity')
-                ->setParameter('typeCity', $criteria['typeCity']);
+            $conditions[] = 'h.animal = :animal';
+            $qb->setParameter('animal', $criteria['animal']);
         }
 
         if (!empty($criteria['transport']) && is_array($criteria['transport'])) {
-            $qb->andWhere('h.transport IN (:transport)')
-                ->setParameter('transport', $criteria['transport']);
+            $conditions[] = 'h.transport IN (:transport)';
+            $qb->setParameter('transport', $criteria['transport']);
         }
 
         if (isset($criteria['restoration'])) {
-            $qb->andWhere('h.restoration = :restoration')
-                ->setParameter('restoration', $criteria['restoration']);
+            $conditions[] = 'h.restoration = :restoration';
+            $qb->setParameter('restoration', $criteria['restoration']);
         }
 
         if (!empty($criteria['wellness']) && is_array($criteria['wellness'])) {
-            $qb->andWhere('h.wellness IN (:wellness)')
-                ->setParameter('wellness', $criteria['wellness']);
+            $conditions[] = 'h.wellness IN (:wellness)';
+            $qb->setParameter('wellness', $criteria['wellness']);
         }
 
         if (!empty($criteria['business']) && is_array($criteria['business'])) {
-            $qb->andWhere('h.business IN (:business)')
-                ->setParameter('business', $criteria['business']);
+            $conditions[] = 'h.business IN (:business)';
+            $qb->setParameter('business', $criteria['business']);
         }
 
         if (!empty($criteria['comfort']) && is_array($criteria['comfort'])) {
-            $qb->andWhere('h.comfort IN (:comfort)')
-                ->setParameter('comfort', $criteria['comfort']);
+            $conditions[] = 'h.comfort IN (:comfort)';
+            $qb->setParameter('comfort', $criteria['comfort']);
         }
 
         if (!empty($criteria['addServices']) && is_array($criteria['addServices'])) {
-            $qb->andWhere('h.addServices IN (:addServices)')
-                ->setParameter('addServices', $criteria['addServices']);
+            $conditions[] = 'h.addServices IN (:addServices)';
+            $qb->setParameter('addServices', $criteria['addServices']);
         }
 
         if (isset($criteria['pmr'])) {
-            $qb->andWhere('h.pmr = :pmr')
-                ->setParameter('pmr', $criteria['pmr']);
+            $conditions[] = 'h.pmr = :pmr';
+            $qb->setParameter('pmr', $criteria['pmr']);
         }
 
         if (isset($criteria['baby'])) {
-            $qb->andWhere('h.baby = :baby')
-                ->setParameter('baby', $criteria['baby']);
+            $conditions[] = 'h.baby = :baby';
+            $qb->setParameter('baby', $criteria['baby']);
         }
 
         if (isset($criteria['category'])) {
+            $conditions[] = 'c.id = :categoryId';
             $qb->join('h.categorie', 'c')
-                ->andWhere('c.id = :categoryId')
                 ->setParameter('categoryId', $criteria['category']);
+        }
+
+        if (count($conditions) > 0) {
+            $qb->andWhere(implode(' OR ', $conditions));
         }
 
         return $qb->getQuery()->getResult();

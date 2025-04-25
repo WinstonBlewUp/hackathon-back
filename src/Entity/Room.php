@@ -31,8 +31,6 @@ use App\Controller\RoomAvailableController;
             uriTemplate: '/rooms/search/quiz',
             controller: SearchQuizController::class,
             name: 'room_search_quiz',
-            normalizationContext: ['groups' => ['room', 'hotel', 'category']],
-            denormalizationContext: ['groups' => ['room', 'hotel', 'category']]
         ),
         new Post(
             uriTemplate: '/rooms/available/{id}',
@@ -48,8 +46,6 @@ use App\Controller\RoomAvailableController;
             uriTemplate: '/rooms/{id}/recommandation',
             controller: RecommandationRoomControlerController::class,
             name: 'room_recommandation',
-            normalizationContext: ['groups' => ['room', 'hotel', 'category']],
-            denormalizationContext: ['groups' => ['room', 'hotel', 'category']]
         ),
     ]
 )]
