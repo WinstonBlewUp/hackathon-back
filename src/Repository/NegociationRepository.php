@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Hotel;
 use App\Entity\Negociation;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -36,6 +37,18 @@ class NegociationRepository extends ServiceEntityRepository
             ->andWhere('n.isClose = false')
             ->andWhere('n.user = :user')
             ->setParameter('user', $userId)
+            ->getQuery()
+            ->getResult();
+    }
+    public function findPendingNegotiationsByHotel(Hotel $hotel): array
+    {
+        return $this->createQueryBuilder('n')
+            ->andWhere('n.room IN (
+            SELECT r.id FROM App\Entity\Room r WHERE r.hotel = :hotel
+        )')
+            ->andWhere('n.status = :status')
+            ->setParameter('hotel', $hotel)
+            ->setParameter('status',  NegociationEnum::PENDING_HOTELIER)
             ->getQuery()
             ->getResult();
     }

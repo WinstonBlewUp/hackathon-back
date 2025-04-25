@@ -8,6 +8,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Delete;
+use App\Controller\AdminNegotiationController;
 use App\Repository\NegociationRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -25,6 +26,11 @@ use App\Controller\OpenNegotiationsController;
         new Post(),
         new Patch(),
         new Delete(),
+        new Get(
+            uriTemplate: '/admin/negotiation/open/{id}',
+            controller: AdminNegotiationController::class,
+            name: 'admin_negotiation_open',
+        ),
         new Get(
             uriTemplate: '/negotiation/open/{id}',
             controller: OpenNegotiationsController::class,
