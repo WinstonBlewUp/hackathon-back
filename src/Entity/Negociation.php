@@ -34,12 +34,7 @@ use function PHPSTORM_META\type;
             uriTemplate: '/negociations/{id}/response/auto',
             controller: NegociationResponseAutoController::class,
             name: 'negociation_response_auto'
-        ),
-        new Patch(
-            uriTemplate: '/negociations/{id}/accept',
-            controller: AcceptNegoController::class,
-            name: 'negociation_accept'
-        ),
+        )
     ]
 )]
 #[ORM\Entity(repositoryClass: NegociationRepository::class)]
