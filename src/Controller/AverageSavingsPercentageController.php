@@ -36,7 +36,7 @@ final class AverageSavingsPercentageController extends AbstractController
         }
 
         if ($count === 0) {
-            return new JsonResponse(['error' => 'No valid challenge prices found'], 400);
+            return new JsonResponse(['average_savings' => 0]);
         }
 
         $averageDifference = $totalDifference / $count;
