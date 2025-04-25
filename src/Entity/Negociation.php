@@ -15,6 +15,7 @@ use App\Enum\NegociationEnum;
 
 use App\Controller\NegociationResponseAutoController;
 use App\Controller\PendingNegociationsController;
+use App\Controller\AcceptNegoController;
 
 #[ApiResource(
     operations: [
@@ -32,6 +33,11 @@ use App\Controller\PendingNegociationsController;
             uriTemplate: '/negociations/{id}/response/auto',
             controller: NegociationResponseAutoController::class,
             name: 'negociation_response_auto'
+        ),
+        new Patch(
+            uriTemplate: '/negociations/{id}/accept',
+            controller: AcceptNegoController::class,
+            name: 'negociation_accept'
         ),
     ]
 )]
