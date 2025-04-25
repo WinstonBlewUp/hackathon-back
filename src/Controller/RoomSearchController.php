@@ -34,9 +34,6 @@ final class RoomSearchController extends AbstractController
             ];
         }, $rooms);
 
-        return $this->json([
-            'total' => count($roomsWithHotelDetails),
-            'rooms' => $roomsWithHotelDetails
-        ], 200);
+        return $this->json($roomsWithHotelDetails, 200);
     }
 }
