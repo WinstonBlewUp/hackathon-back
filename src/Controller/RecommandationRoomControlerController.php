@@ -39,7 +39,19 @@ final class RecommandationRoomControlerController extends AbstractController
 
             $recommendedRooms = array_merge($recommendedRooms, $rooms);
         }
+        
+        $recommendedRoomsWithHotelDetails = array_map(function ($room) {
+            return [
+                'roomId' => $room->getId(),
+                'roomName' => $room->getName(),
+                'roomDescription' => $room->getDescription(),
+                'roomBasePrice' => $room->getBasePrice(),
+                'roomMaxGuests' => $room->getMaxGuests(),
+                'hotelId' => $room->getHotel()->getId(),
+                'hotelName' => $room->getHotel()->getName(),
+            ];
+        }, $recommendedRooms);
 
-        return $this->json($recommendedRooms, 200, [], ['groups' => ['room', 'hotel', 'category']]);
+        return $this->json($recommendedRoomsWithHotelDetails, 200, [], ['groups' => ['room', 'hotel', 'category']]);
     }
 }
