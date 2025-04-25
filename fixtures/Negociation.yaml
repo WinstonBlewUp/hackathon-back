@@ -5,6 +5,7 @@ App\Entity\Negociation:
     responseAt: '<($createdAt->modify("+1 day"))>'
     challengePrice: '<(rand(0, 1) ? $requestedPrice - (10 + rand(0, 30)) : null)>'
     user: '@user_*'
+    room: '@room_*'
     
   negociation_pending_hotelier_{1..50} (extends negociation_template):
     status: !php/const App\Enum\NegociationEnum::PENDING_HOTELIER

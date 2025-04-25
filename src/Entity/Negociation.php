@@ -15,6 +15,7 @@ use App\Enum\NegociationEnum;
 
 use App\Controller\PendingNegociationClientController;
 use App\Controller\PendingNegociationHotelierController;
+use App\Controller\NegociationResponseAutoController;
 
 #[ApiResource(
     operations: [
@@ -32,6 +33,11 @@ use App\Controller\PendingNegociationHotelierController;
             uriTemplate: '/negociations/status/pending/hotelier',
             controller: PendingNegociationHotelierController::class,
             name: 'negociation_pending_hotelier'
+        ),
+        new Get(
+            uriTemplate: '/negociations/{id}/response/auto',
+            controller: NegociationResponseAutoController::class,
+            name: 'negociation_response_auto'
         ),
     ]
 )]
@@ -62,6 +68,10 @@ class Negociation
     #[ORM\ManyToOne(inversedBy: 'negociations')]
     #[ORM\JoinColumn(name:'USR_ID',referencedColumnName:'USR_ID')]
     private ?User $user = null;
+
+    #[ORM\ManyToOne(inversedBy: 'negociations')]
+    #[ORM\JoinColumn(name:'ROOM_ID',referencedColumnName:'ROOM_ID')]
+    private ?Room $room = null;
 
     public function getId(): int
     {
@@ -136,6 +146,18 @@ class Negociation
     public function setUser(?User $user): static
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getRoom(): ?Room
+    {
+        return $this->room;
+    }
+
+    public function setRoom(?Room $room): static
+    {
+        $this->room = $room;
 
         return $this;
     }
