@@ -2,7 +2,7 @@ App\Entity\Reservation:
   reservation_template (template):
     createdAt: <dateTimeBetween('-2 years', '-1 years')>
     startDate: <dateTimeBetween('-1 years', 'now')>
-    endDate: <dateTimeBetween('now', '+1 years')>
+    endDate: '<($startDate->modify("+1 week"))>'
     price: '<numberBetween(100, 500)>'
     user: '@user_*'
     room: '@room_*'
