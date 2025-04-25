@@ -104,6 +104,7 @@ class Hotel
 
     #[ORM\ManyToOne(inversedBy: 'hotels')]
     #[ORM\JoinColumn(name:'CAT_ID',referencedColumnName:'CAT_ID')]
+    #[Group(['hotel'])]
     private ?Categorie $categorie = null;
 
     public function __construct()

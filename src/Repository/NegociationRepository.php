@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Negociation;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Enum\NegociationEnum;
 
 /**
  * @extends ServiceEntityRepository<Negociation>
@@ -15,6 +16,20 @@ class NegociationRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Negociation::class);
     }
+
+    public function findOpenNegociationsByUser(int $userId): array
+    {
+        return $this->createQueryBuilder('n')
+            ->leftJoin('n.room', 'r')
+            ->leftJoin('r.hotel', 'h')
+            ->addSelect('r', 'h')
+            ->andWhere('n.isClose = false')
+            ->andWhere('n.user = :user')
+            ->setParameter('user', $userId)
+            ->getQuery()
+            ->getResult();
+    }
+
 
     //    /**
     //     * @return Negociation[] Returns an array of Negociation objects

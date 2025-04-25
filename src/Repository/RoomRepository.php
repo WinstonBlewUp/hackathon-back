@@ -6,6 +6,8 @@ use App\Entity\Room;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
+use App\Entity\Hotel;
+
 /**
  * @extends ServiceEntityRepository<Room>
  */
@@ -47,8 +49,41 @@ class RoomRepository extends ServiceEntityRepository
             ->setParameter('startDate', $startDate)
             ->setParameter('endDate', $endDate)
             ->andWhere('res.id IS NULL')
-            ->andWhere('h.maxGuests = :maxGuests')
+            ->andWhere('r.maxGuests = :maxGuests')
             ->setParameter('maxGuests', $maxGuests);
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function findAvailableRoomsForTonight($tonight, $tomorrow): array
+    {
+        $qb = $this->createQueryBuilder('room')
+            ->leftJoin('room.reservations', 'res', 'WITH', 
+                ':tonight < res.endDate AND :tomorrow > res.startDate'
+            )
+            ->where('res.id IS NULL')
+            ->setParameter('tonight', $tonight)
+            ->setParameter('tomorrow', $tomorrow);
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function findAvailableRoomsByCategoryAndUser(int $categoryId, int $userId, int $mostFrequentMaxGuests)
+    {
+        $qb = $this->createQueryBuilder('room')
+            ->join('room.hotel', 'hotel')
+            ->join('hotel.categorie', 'categorie')
+            ->leftJoin('room.reservations', 'res', 'WITH', 
+                'res.user = :userId' 
+            )
+            ->leftJoin('room.users', 'u', 'WITH', 'u.id = :userId')
+            ->where('categorie.id = :categorieId')
+            ->andWhere('res.id IS NULL') 
+            ->andWhere('u.id IS NULL')
+            ->andWhere('room.maxGuests = :maxGuests')
+            ->setParameter('categorieId', $categoryId)
+            ->setParameter('userId', $userId)
+            ->setParameter('maxGuests', $mostFrequentMaxGuests);
 
         return $qb->getQuery()->getResult();
     }

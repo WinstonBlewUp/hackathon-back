@@ -24,10 +24,10 @@ class Threshold
     private int $maximum;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE, name: 'THR_START_DATE')]
-    private \DateTimeImmutable $startDate;
+    private ?\DateTimeImmutable $startDate = null;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE, name: 'THR_END_DATE')]
-    private \DateTimeImmutable $endDate;
+    private ?\DateTimeImmutable $endDate = null;
 
     #[ORM\ManyToOne(inversedBy: 'thresholds')]
     #[ORM\JoinColumn(name:'HTL_ID',referencedColumnName:'HTL_ID')]
@@ -62,24 +62,24 @@ class Threshold
         return $this;
     }
 
-    public function getStartDate(): \DateTimeImmutable
+    public function getStartDate(): ?\DateTimeImmutable
     {
         return $this->startDate;
     }
 
-    public function setStartDate(\DateTimeImmutable $startDate): static
+    public function setStartDate(?\DateTimeImmutable $startDate): static
     {
         $this->startDate = $startDate;
 
         return $this;
     }
 
-    public function getEndDate(): \DateTimeImmutable
+    public function getEndDate(): ?\DateTimeImmutable
     {
         return $this->endDate;
     }
 
-    public function setEndDate(\DateTimeImmutable $endDate): static
+    public function setEndDate(?\DateTimeImmutable $endDate): static
     {
         $this->endDate = $endDate;
 

@@ -5,4 +5,3 @@ App\Entity\Room:
     basePrice: <numberBetween(100, 1000)>
     maxGuests: <numberBetween(1, 10)>
     hotel: '@hotel_<numberBetween(1,30)>'
-    reservation: '@reservation_*'

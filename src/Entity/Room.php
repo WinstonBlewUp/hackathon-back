@@ -15,19 +15,42 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
+use App\Controller\SearchQuizController;
+use App\Controller\LastMinuteRoomController;
+use App\Controller\RecommandationRoomControlerController;
+use App\Controller\RoomAvailableController;
+
 #[ApiResource(
     operations: [
         new Get(),
         new GetCollection(),
-        new Post(), 
+        new Post(),
         new Patch(),
         new Delete(),
-        new Get(
+        new Post(
             uriTemplate: '/rooms/search/quiz',
-            controller: 'App\Controller\RoomController::class',
-            name: "search_quiz",
-            normalizationContext: ['groups' => ['room_like', 'hotel_like']]
-            )
+            controller: SearchQuizController::class,
+            name: 'room_search_quiz',
+            normalizationContext: ['groups' => ['room', 'hotel', 'category']],
+            denormalizationContext: ['groups' => ['room', 'hotel', 'category']]
+        ),
+        new Post(
+            uriTemplate: '/rooms/available/{id}',
+            controller: RoomAvailableController::class,
+            name: 'room_available'
+        ),
+        new GetCollection(
+            uriTemplate: '/room/lastminute',
+            controller: LastMinuteRoomController::class,
+            name: 'room_lastminute'
+        ),
+        new Get(
+            uriTemplate: '/rooms/{id}/recommandation',
+            controller: RecommandationRoomControlerController::class,
+            name: 'room_recommandation',
+            normalizationContext: ['groups' => ['room', 'hotel', 'category']],
+            denormalizationContext: ['groups' => ['room', 'hotel', 'category']]
+        ),
     ]
 )]
 #[ORM\Entity(repositoryClass: RoomRepository::class)]
@@ -37,23 +60,23 @@ class Room
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(name: 'ROOM_ID')]
-    #[Groups(['room_like'])]
+    #[Groups(['room'])]
     private int $id;
 
     #[ORM\Column(length: 255, name: 'ROOM_NAME')]
-    #[Groups(['room_like'])]
-    private string $name;
+    #[Groups(['room'])]
+    private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT, name: 'ROOM_DESCRIPTION')]
-    #[Groups(['room_like'])]
+    #[Groups(['room'])]
     private ?string $description = null;
 
     #[ORM\Column(name: 'ROOM_BASE_PRICE')]
-    #[Groups(['room_like'])]
+    #[Groups(['room'])]
     private ?int $basePrice = null;
 
     #[ORM\Column(name: 'ROOM_MAX_GUESTS')]
-    #[Groups(['room_like'])]
+    #[Groups(['room'])]
     private ?int $maxGuests = null;
 
     /**
@@ -63,17 +86,27 @@ class Room
     private Collection $users;
 
     #[ORM\ManyToOne(inversedBy: 'rooms')]
-    #[ORM\JoinColumn(name:'HTL_ID',referencedColumnName:'HTL_ID')]
-    #[Groups(['room_like'])]
+    #[ORM\JoinColumn(name: 'HTL_ID', referencedColumnName: 'HTL_ID')]
+    #[Group(['room'])]
     private ?Hotel $hotel = null;
 
-    #[ORM\ManyToOne(inversedBy: 'rooms')]
-    #[ORM\JoinColumn(name:'RES_ID',referencedColumnName:'RES_ID')]
-    private ?Reservation $reservation = null;
+    /**
+     * @var Collection<int, Reservation>
+     */
+    #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'room')]
+    private Collection $reservations;
+
+    /**
+     * @var Collection<int, Negociation>
+     */
+    #[ORM\OneToMany(targetEntity: Negociation::class, mappedBy: 'room')]
+    private Collection $negociations;
 
     public function __construct()
     {
         $this->users = new ArrayCollection();
+        $this->reservations = new ArrayCollection();
+        $this->negociations = new ArrayCollection();
     }
 
     public function getId(): int
@@ -168,14 +201,62 @@ class Room
         return $this;
     }
 
-    public function getReservation(): ?Reservation
+    /**
+     * @return Collection<int, Reservation>
+     */
+    public function getReservations(): Collection
     {
-        return $this->reservation;
+        return $this->reservations;
     }
 
-    public function setReservation(?Reservation $reservation): static
+    public function addReservation(Reservation $reservation): static
     {
-        $this->reservation = $reservation;
+        if (!$this->reservations->contains($reservation)) {
+            $this->reservations->add($reservation);
+            $reservation->setRoom($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReservation(Reservation $reservation): static
+    {
+        if ($this->reservations->removeElement($reservation)) {
+            // set the owning side to null (unless already changed)
+            if ($reservation->getRoom() === $this) {
+                $reservation->setRoom(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Negociation>
+     */
+    public function getNegociations(): Collection
+    {
+        return $this->negociations;
+    }
+
+    public function addNegociation(Negociation $negociation): static
+    {
+        if (!$this->negociations->contains($negociation)) {
+            $this->negociations->add($negociation);
+            $negociation->setRoom($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNegociation(Negociation $negociation): static
+    {
+        if ($this->negociations->removeElement($negociation)) {
+            // set the owning side to null (unless already changed)
+            if ($negociation->getRoom() === $this) {
+                $negociation->setRoom(null);
+            }
+        }
 
         return $this;
     }
