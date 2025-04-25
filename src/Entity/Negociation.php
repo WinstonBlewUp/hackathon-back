@@ -16,7 +16,7 @@ use App\Enum\NegociationEnum;
 
 use App\Controller\NegociationResponseAutoController;
 use App\Controller\OpenNegotiationsController;
-
+use App\Controller\CloseNegotiationController;
 
 #[ApiResource(
     operations: [
@@ -30,10 +30,15 @@ use App\Controller\OpenNegotiationsController;
             controller: OpenNegotiationsController::class,
             name: 'negotiation_open',
         ),
-        new Get(
+        new Patch(
             uriTemplate: '/negociations/{id}/response/auto',
             controller: NegociationResponseAutoController::class,
             name: 'negociation_response_auto'
+        ),
+        new Patch(
+            uriTemplate: '/negociations/close/{id}',
+            controller: CloseNegotiationController::class,
+            name: 'negotiation_close'
         ),
     ]
 )]
