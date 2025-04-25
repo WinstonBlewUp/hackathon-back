@@ -2,21 +2,17 @@ App\Entity\Negociation:
   negociation_template (template):
     requestedPrice: '<numberBetween(50, 500)>'
     createdAt: <dateTimeBetween('-2 years', '-1 years')>
-    responseAt: '<($createdAt->modify("+1 day"))>'
+    responseAt: '<($createdAt->modify("+1 day")->modify("+" . rand(1, 12) . " hours")->modify("+" . rand(0, 59) . " minutes")->modify("+" . rand(0, 59) . " seconds"))>'
     challengePrice: '<(rand(0, 1) ? $requestedPrice - (10 + rand(0, 30)) : null)>'
     isClose: <boolean()>
     user: '@user_*'
     room: '@room_*'
 
-    
   negociation_pending_hotelier_{1..50} (extends negociation_template):
     status: !php/const App\Enum\NegociationEnum::PENDING_HOTELIER
   
   negociation_pending_client_{1..50} (extends negociation_template):
     status: !php/const App\Enum\NegociationEnum::PENDING_CLIENT
-
-  negociation_accepted_hotelier_{1..50} (extends negociation_template):
-    status: !php/const App\Enum\NegociationEnum::ACCEPTED_HOTELIER
 
   negociation_refused_hotelier_{1..50} (extends negociation_template):
     status: !php/const App\Enum\NegociationEnum::REFUSED_HOTELIER

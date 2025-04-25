@@ -57,10 +57,10 @@ class Negociation
     #[ORM\Column(name: 'NEG_STATUS', enumType: NegociationEnum::class)]
     private NegociationEnum $status;
 
-    #[ORM\Column(type: Types::DATE_IMMUTABLE, name: 'NEG_CREATED_AT')]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, name: 'NEG_CREATED_AT')]
     private \DateTimeImmutable $createdAt;
 
-    #[ORM\Column(type: Types::DATE_IMMUTABLE, name: 'NEG_RESPONSE_AT')]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, name: 'NEG_RESPONSE_AT')]
     private \DateTimeImmutable $responseAt;
 
     #[ORM\Column(length: 255, nullable: true, name: 'NEG_CHALLENGE_PRICE')]
