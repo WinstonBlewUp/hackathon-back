@@ -4,6 +4,7 @@ namespace App\Entity;
 
 
 use ApiPlatform\Metadata\ApiResource;
+use App\Controller\CategorieController;
 use App\Controller\CategorieRoomController;
 use App\Repository\CategorieRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -14,8 +15,6 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Delete;
-
-use App\Controller\CategorieController;
 
 #[ApiResource(
     operations: [

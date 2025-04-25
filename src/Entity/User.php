@@ -16,7 +16,7 @@ use App\Controller\ReservationByUserController;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
+use Doctrine\DBAL\Types\Types;
 
 #[ApiResource(
     operations: [
@@ -44,9 +44,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new Get(
             uriTemplate: '/user/{id}/reservations',
             controller: ReservationByUserController::class,
-            name: 'user_reservations',
-            normalizationContext: ['groups' => ['room_like', 'hotel_like']],
-            denormalizationContext: ['groups' => ['room_like', 'hotel_like']]),
+            name: 'user_reservations'
+        )
     ]
 )]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -76,7 +75,7 @@ class User
     #[ORM\Column(name : 'USR_ROLE')]
     private array $role = [];
 
-    #[ORM\Column(name : 'USR_CREATED_AT')]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, name : 'USR_CREATED_AT')]
     private ?\DateTimeImmutable $createdAt = null;
 
     /**
