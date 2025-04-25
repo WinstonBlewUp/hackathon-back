@@ -3,12 +3,31 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Delete;
 use App\Repository\NegociationRepository;
+use App\Controller\AverageSavingsPercentageController;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Enum\NegociationEnum;
 
-#[ApiResource]
+#[ApiResource(
+    operations: [
+        new Get(),
+        new GetCollection(),
+        new Post(), 
+        new Patch(),
+        new Delete(),
+        new Get(
+            uriTemplate: '/averageSavingsPercentage/{id}',
+            controller: AverageSavingsPercentageController::class,
+            name: 'average_savings_percentage'
+        )
+    ]
+)]
 #[ORM\Entity(repositoryClass: NegociationRepository::class)]
 #[ORM\Table(name: 'MTC_NEGOCIATION')]
 class Negociation
