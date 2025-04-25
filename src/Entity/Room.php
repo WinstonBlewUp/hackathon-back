@@ -13,7 +13,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
 
 use App\Controller\SearchQuizController;
 use App\Controller\LastMinuteRoomController;
@@ -31,8 +30,6 @@ use App\Controller\RoomAvailableController;
             uriTemplate: '/rooms/search/quiz',
             controller: SearchQuizController::class,
             name: 'room_search_quiz',
-            normalizationContext: ['groups' => ['room', 'hotel', 'category']],
-            denormalizationContext: ['groups' => ['room', 'hotel', 'category']]
         ),
         new Post(
             uriTemplate: '/rooms/available/{id}',
@@ -48,8 +45,6 @@ use App\Controller\RoomAvailableController;
             uriTemplate: '/rooms/{id}/recommandation',
             controller: RecommandationRoomControlerController::class,
             name: 'room_recommandation',
-            normalizationContext: ['groups' => ['room', 'hotel', 'category']],
-            denormalizationContext: ['groups' => ['room', 'hotel', 'category']]
         ),
     ]
 )]
@@ -60,23 +55,18 @@ class Room
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(name: 'ROOM_ID')]
-    #[Groups(['room'])]
     private int $id;
 
     #[ORM\Column(length: 255, name: 'ROOM_NAME')]
-    #[Groups(['room'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT, name: 'ROOM_DESCRIPTION')]
-    #[Groups(['room'])]
     private ?string $description = null;
 
     #[ORM\Column(name: 'ROOM_BASE_PRICE')]
-    #[Groups(['room'])]
     private ?int $basePrice = null;
 
     #[ORM\Column(name: 'ROOM_MAX_GUESTS')]
-    #[Groups(['room'])]
     private ?int $maxGuests = null;
 
     /**
@@ -87,7 +77,6 @@ class Room
 
     #[ORM\ManyToOne(inversedBy: 'rooms')]
     #[ORM\JoinColumn(name: 'HTL_ID', referencedColumnName: 'HTL_ID')]
-    #[Group(['room'])]
     private ?Hotel $hotel = null;
 
     /**

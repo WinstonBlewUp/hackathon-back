@@ -23,10 +23,10 @@ class Threshold
     #[ORM\Column(name: 'THR_MAXIMUM')]
     private int $maximum;
 
-    #[ORM\Column(type: Types::DATE_IMMUTABLE, name: 'THR_START_DATE')]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, name: 'THR_START_DATE')]
     private ?\DateTimeImmutable $startDate = null;
 
-    #[ORM\Column(type: Types::DATE_IMMUTABLE, name: 'THR_END_DATE')]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, name: 'THR_END_DATE')]
     private ?\DateTimeImmutable $endDate = null;
 
     #[ORM\ManyToOne(inversedBy: 'thresholds')]

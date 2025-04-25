@@ -14,6 +14,28 @@ use App\Repository\CategorieRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Delete;
+
+use App\Controller\CategorieController;
+
+#[ApiResource(
+    operations: [
+        new Get(),
+        new GetCollection(),
+        new Post(),
+        new Patch(),
+        new Delete(),
+        new GetCollection(
+            uriTemplate: '/categories/{id}/rooms',
+            controller: CategorieController::class,
+            name: 'categories_rooms'
+        ),
+    ]
+)]
 use Symfony\Component\Serializer\Annotation\Groups;
 
 // #[ApiResource]
@@ -38,11 +60,9 @@ class Categorie
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(name: 'CAT_ID')]
-    #[Groups(['category'])]
     private int $id;
 
     #[ORM\Column(length: 255, name: 'CAT_LABEL')]
-    #[Groups(['category'])]
     private string $label;
 
     /**

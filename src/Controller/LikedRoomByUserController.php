@@ -37,6 +37,6 @@ final class LikedRoomByUserController extends AbstractController
             ];
         }, $roomLikedArray);
 
-        return $this->json($roomLikedWithHotelDetails, 200);
+        return $this->json($roomLikedWithHotelDetails);
     }
 }

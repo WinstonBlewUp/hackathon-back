@@ -9,7 +9,6 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Enum\HotelRestorationEnum;
 use App\Enum\HotelTypeCityEnum;
-use Symfony\Component\Validator\Attribute\Group;
 
 #[ApiResource]
 #[ORM\Entity(repositoryClass: HotelRepository::class)]
@@ -19,71 +18,54 @@ class Hotel
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(name: 'HTL_ID')]
-    #[Group(['hotel'])]
     private int $id;
 
     #[ORM\Column(length: 255, name: 'HTL_NAME')]
-    #[Group(['hotel'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255, name: 'HTL_ADRESS')]
-    #[Group(['hotel'])]
     private ?string $address = null;
 
     #[ORM\Column(length: 255, name: 'HTL_CITY')]
-    #[Group(['hotel'])]
     private ?string $city = null;
 
     #[ORM\Column(length: 255, name: 'HTL_COUNTRY')]
-    #[Group(['hotel'])]
     private ?string $country = null;
 
     #[ORM\Column(length: 255, name: 'HTL_DESCRIPTION')]
-    #[Group(['hotel'])]
     private ?string $description = null;
 
     #[ORM\Column(name: 'HTL_CHILDREN')]
-    #[Group(['hotel'])]
     private ?bool $children = null;
 
     #[ORM\Column(name: 'HTL_ANIMAL')]
-    #[Group(['hotel'])]
     private ?bool $animal = null;
 
     #[ORM\Column(name: 'HTL_TYPE_CITY', enumType: HotelTypeCityEnum::class)]
-    #[Group(['hotel'])]
     private HotelTypeCityEnum $typeCity;
 
     #[ORM\Column(length: 255, name: 'HTL_TRANSPORT')]
-    #[Group(['hotel'])]
     private array $transport = [];
 
     #[ORM\Column(name: 'HTL_RESTORATION', enumType: HotelRestorationEnum::class)]
-    #[Group(['hotel'])]
     private HotelRestorationEnum $restoration;
 
     #[ORM\Column(name: 'HTL_WELLNESS')]
-    #[Group(['hotel'])]
     private array $wellness = [];
 
     #[ORM\Column(name: 'HTL_BUSINESS_SERVICE')]
-    #[Group(['hotel'])]
     private array $business = [];
 
     #[ORM\Column(name: 'HTL_COMFORT')]
-    #[Group(['hotel'])]
     private array $comfort = [];
 
     #[ORM\Column(name: 'HTL_ADD_SERVICES')]
-    #[Group(['hotel'])]
     private array $addServices = [];
 
     #[ORM\Column(name: 'HTL_PMR')]
-    #[Group(['hotel'])]
     private ?bool $pmr = null;
 
     #[ORM\Column(name: 'HTL_BABY')]
-    #[Group(['hotel'])]
     private ?bool $baby = null;
 
     #[ORM\ManyToOne(inversedBy: 'hotels')]
@@ -104,7 +86,6 @@ class Hotel
 
     #[ORM\ManyToOne(inversedBy: 'hotels')]
     #[ORM\JoinColumn(name:'CAT_ID',referencedColumnName:'CAT_ID')]
-    #[Group(['hotel'])]
     private ?Categorie $categorie = null;
 
     public function __construct()

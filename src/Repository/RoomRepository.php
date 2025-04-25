@@ -28,11 +28,9 @@ class RoomRepository extends ServiceEntityRepository
             )
             ->where('categorie.id = :categorieId')
             ->andWhere('res.id IS NULL')
-            ->setParameters([
-                'categorieId' => $categoryId,
-                'startDate' => $startDate,
-                'endDate' => $endDate,
-            ]);
+            ->setParameter('categorieId', $categoryId)
+            ->setParameter('startDate', $startDate)
+            ->setParameter('endDate', $endDate);
 
         return $qb->getQuery()->getResult();
     }
@@ -43,12 +41,14 @@ class RoomRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('r')
             ->where('r.hotel = :hotel')
             ->setParameter('hotel', $hotel)
-            ->leftJoin('r.reservations', 'res')
-            ->andWhere('res.startDate < :endDate')
-            ->andWhere('res.endDate > :startDate')
+            ->leftJoin('r.reservations', 'res') 
+            ->andWhere('r.id NOT IN (
+                SELECT r2.id FROM App\Entity\Room r2
+                JOIN r2.reservations res2
+                WHERE res2.startDate < :endDate AND res2.endDate > :startDate
+            )')
             ->setParameter('startDate', $startDate)
             ->setParameter('endDate', $endDate)
-            ->andWhere('res.id IS NULL')
             ->andWhere('r.maxGuests = :maxGuests')
             ->setParameter('maxGuests', $maxGuests);
 

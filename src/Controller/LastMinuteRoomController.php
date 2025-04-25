@@ -23,6 +23,6 @@ final class LastMinuteRoomController extends AbstractController
 
         $rooms = $this->roomRepository->findAvailableRoomsForTonight($tonight, $tomorrow);
 
-        return $this->json($rooms, 200);
+        return $this->json($rooms);
     }
 }

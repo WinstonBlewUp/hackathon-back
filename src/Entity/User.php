@@ -28,13 +28,13 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new Get(
             uriTemplate: '/like/{id}',
             controller: LikedRoomByUserController::class,
-            name: 'get_user_likes',
-            normalizationContext: ['groups' => ['room_like', 'hotel_like']],
-            denormalizationContext: ['groups' => ['room_like', 'hotel_like']]),
+            name: 'get_user_likes'
+        ),
         new Get(
             uriTemplate: '/exist/{email}/{password}',
             controller: UserExistController::class,
-            name: 'user_exist'),
+            name: 'user_exist'
+        ),
         new Get(
             uriTemplate: 'user/{id}/averageSavingsPercentage',
             controller: AverageSavingsPercentageController::class,
@@ -56,19 +56,15 @@ class User
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(name: 'USR_ID')]
-    #[Groups(['room_like', 'hotel_like'])]
     private int $id;
 
     #[ORM\Column(length: 30, name: 'USR_NAME')]
-    #[Groups(['room_like', 'hotel_like'])]
     private string $name;
 
     #[ORM\Column(length: 100, name: 'USR_FIRSTNAME')]
-    #[Groups(['room_like', 'hotel_like'])]
     private string $firstname;
 
     #[ORM\Column(length: 255, name: 'USR_EMAIL')]
-    #[Groups(['room_like', 'hotel_like'])]
     private ?string $email = null;
 
     #[ORM\Column(length: 255, name: 'USR_PASSWORD')]
@@ -90,7 +86,6 @@ class User
     #[ORM\JoinTable(name: 'MTC_LIKE')]
     #[ORM\JoinColumn(name: 'USR_ID', referencedColumnName: 'USR_ID', nullable: false)]
     #[ORM\InverseJoinColumn(name: 'ROOM_ID', referencedColumnName: 'ROOM_ID')]
-    #[Groups(['room_like'])]
     private Collection $liked;
 
     /**
