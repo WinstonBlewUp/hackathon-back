@@ -24,7 +24,7 @@ use App\Controller\RoomAvailableController;
     operations: [
         new Get(),
         new GetCollection(),
-        new Post(), 
+        new Post(),
         new Patch(),
         new Delete(),
         new Post(
@@ -86,7 +86,7 @@ class Room
     private Collection $users;
 
     #[ORM\ManyToOne(inversedBy: 'rooms')]
-    #[ORM\JoinColumn(name:'HTL_ID',referencedColumnName:'HTL_ID')]
+    #[ORM\JoinColumn(name: 'HTL_ID', referencedColumnName: 'HTL_ID')]
     #[Group(['room'])]
     private ?Hotel $hotel = null;
 

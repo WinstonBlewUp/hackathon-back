@@ -20,6 +20,9 @@ class NegociationRepository extends ServiceEntityRepository
     public function findOpenNegociationsByUser(int $userId): array
     {
         return $this->createQueryBuilder('n')
+            ->leftJoin('n.room', 'r')
+            ->leftJoin('r.hotel', 'h')
+            ->addSelect('r', 'h')
             ->andWhere('n.isClose = false')
             ->andWhere('n.user = :user')
             ->setParameter('user', $userId)

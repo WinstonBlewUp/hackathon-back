@@ -26,7 +26,7 @@ use function PHPSTORM_META\type;
         new Patch(),
         new Delete(),
         new Get(
-            uriTemplate: '/negotiation/open/{id}',
+            uriTemplate: '/negotiation/{id}',
             controller: OpenNegotiationsController::class,
             name: 'negotiation_open',
         ),
