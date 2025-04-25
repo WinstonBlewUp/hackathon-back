@@ -17,14 +17,16 @@ class NegociationRepository extends ServiceEntityRepository
         parent::__construct($registry, Negociation::class);
     }
 
-    public function findByStatuses(array $statuses): array
+    public function findOpenNegociationsByUser(int $userId): array
     {
         return $this->createQueryBuilder('n')
-            ->andWhere('n.status IN (:statuses)')
-            ->setParameter('statuses', $statuses)
+            ->andWhere('n.isClose = false')
+            ->andWhere('n.user = :user')
+            ->setParameter('user', $userId)
             ->getQuery()
             ->getResult();
     }
+
 
     //    /**
     //     * @return Negociation[] Returns an array of Negociation objects
