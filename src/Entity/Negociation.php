@@ -59,8 +59,7 @@ use App\Controller\NegotiationRoomAvailableController;
             controller: NegotiationResponseClientController::class,
             name: 'negociation_response_client'
         ),
-        // A modifier en patch
-        new Get(
+        new Patch(
             uriTemplate: '/negotiation/room/available/{id}',
             controller: NegotiationRoomAvailableController::class,
             name: 'negotiation_room_available',

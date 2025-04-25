@@ -40,6 +40,6 @@ final class RecommandationRoomControlerController extends AbstractController
             $recommendedRooms = array_merge($recommendedRooms, $rooms);
         }
 
-        return $this->json($recommendedRooms, 200, [], ['groups' => ['room', 'hotel', 'category']]);
+        return $this->json($recommendedRooms);
     }
 }

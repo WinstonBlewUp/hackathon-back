@@ -22,7 +22,6 @@ final class OpenNegotiationsController extends AbstractController
         $openNegotiation = $this->negociationRepository->findOpenNegociationsByUser($id);
         $openNegotiation = $this->negociationRepository->findOpenNegociationsByUser($id);
 
-        // Transformation des données pour inclure les informations de la chambre et de l'hôtel
         $negotiationsWithRoomDetails = array_map(function ($negociation) {
             $room = $negociation->getRoom();
             $hotel = $room->getHotel();
@@ -35,7 +34,7 @@ final class OpenNegotiationsController extends AbstractController
                 'responseAt' => $negociation->getResponseAt()->format('Y-m-d H:i:s'),
                 'challengePrice' => $negociation->getChallengePrice(),
                 'isClose' => $negociation->getIsClose(),
-                'user' => $negociation->getUser()->getId(),  // Tu peux aussi détailler l'utilisateur ici si nécessaire
+                'user' => $negociation->getUser()->getId(),
                 'room' => [
                     'roomId' => $room->getId(),
                     'roomName' => $room->getName(),

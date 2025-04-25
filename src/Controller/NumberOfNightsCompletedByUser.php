@@ -20,6 +20,6 @@ final class NumberOfNightsCompletedByUser extends AbstractController
     {
         $totalNights = $this->reservationRepository->TotalNightsByUser($id);
         
-        return $this->json($totalNights, 200, [], ['groups' => ['user']]);
+        return $this->json($totalNights);
     }
 }
