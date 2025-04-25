@@ -13,6 +13,7 @@ use App\Controller\LikedRoomByUserController;
 use App\Controller\UserExistController;
 use App\Controller\AverageSavingsPercentageController;
 use App\Controller\ReservationByUserController;
+use App\Controller\UserLikedRoomsController;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -45,7 +46,14 @@ use Doctrine\DBAL\Types\Types;
             uriTemplate: '/user/{id}/reservations',
             controller: ReservationByUserController::class,
             name: 'user_reservations'
-        )
+        ),
+        new Get(
+            uriTemplate: '/add/like/{id}/{roomId}',
+            controller: UserLikedRoomsController::class,
+            name: 'user_add_liked_rooms',
+            read: false,
+            deserialize: false,
+        ),
     ]
 )]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
