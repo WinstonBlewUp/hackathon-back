@@ -1,7 +1,7 @@
 App\Entity\Threshold:
   threshold_{1..30}:
-    minimum: 0
-    maximum: 100
+    minimum: 20
+    maximum: 60
     startDate: <dateTimeBetween('-1 years', 'now')>
     endDate: <dateTimeBetween('now', '+1 years')>
     hotel: '@hotel_<current()>'

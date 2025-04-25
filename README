@@ -1,0 +1,85 @@
+# API de mise en relation Client-Hôtelier
+
+Ce dépôt contient l'API backend pour l'application de mise en relation entre clients et hôteliers.
+
+## Prérequis
+
+- Docker et Docker Compose
+
+## Installation et configuration
+
+### Démarrage des conteneurs
+
+1. Clonez le dépôt et accédez au répertoire Docker :
+```
+git clone [URL_DU_REPO]
+cd .docker
+```
+
+2. Lancez les conteneurs en mode détaché :
+```
+docker compose up -d
+```
+
+3. Accédez au conteneur PHP :
+```
+docker exec -it matchroom-php-1 /bin/bash
+```
+
+### Configuration de la base de données
+
+1. Accédez à phpMyAdmin via [http://localhost:8081](http://localhost:8081)
+2. Connectez-vous avec les identifiants :
+   - Utilisateur : root
+   - Mot de passe : hello
+3. Créez une nouvelle base de données nommée `app_db`
+
+### Initialisation de la base de données
+
+Dans le terminal du conteneur PHP, exécutez les commandes suivantes :
+
+1. Pour exécuter les migrations :
+```
+php bin/console d:m:m
+```
+
+2. Pour charger les fixtures (données de test) :
+```
+php bin/console hautelook:fixtures:load
+```
+
+## Utilisation de l'API
+
+L'API est accessible à l'adresse [http://localhost:80/api](http://localhost:80/api)
+
+Vous y trouverez l'interface Swagger d'API Platform qui vous permet de visualiser et tester tous les endpoints disponibles.
+
+## Structure du projet
+
+```
+project/
+├── .docker/               # Configuration Docker
+├── config/                # Configuration Symfony
+├── migrations/            # Migrations de base de données
+├── src/
+│   ├── Controller/        # Contrôleurs API
+│   ├── Entity/            # Entités de base de données
+│   ├── Repository/        # Repositories
+│   └── ...
+├── fixtures/              # Données de test
+└── ...
+```
+
+## Technologies utilisées
+
+- API Platform
+- Symfony
+- Docker
+- MySQL
+- Hautelook Alice Bundle pour les fixtures
+
+## Fonctionnalités principales
+
+- Gestion des utilisateurs (clients et hôteliers)
+- Système de matching entre clients et hôteliers
+ 
