@@ -14,7 +14,22 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Delete;
 
-#[ApiResource]
+use App\Controller\CategorieController;
+
+#[ApiResource(
+    operations: [
+        new Get(),
+        new GetCollection(),
+        new Post(),
+        new Patch(),
+        new Delete(),
+        new GetCollection(
+            uriTemplate: '/categories/{id}/rooms',
+            controller: CategorieController::class,
+            name: 'categories_rooms'
+        ),
+    ]
+)]
 #[ORM\Entity(repositoryClass: CategorieRepository::class)]
 #[ORM\Table(name: 'MTC_CATEGORIE')]
 class Categorie

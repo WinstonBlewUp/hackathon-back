@@ -28,11 +28,9 @@ class RoomRepository extends ServiceEntityRepository
             )
             ->where('categorie.id = :categorieId')
             ->andWhere('res.id IS NULL')
-            ->setParameters([
-                'categorieId' => $categoryId,
-                'startDate' => $startDate,
-                'endDate' => $endDate,
-            ]);
+            ->setParameter('categorieId', $categoryId)
+            ->setParameter('startDate', $startDate)
+            ->setParameter('endDate', $endDate);
 
         return $qb->getQuery()->getResult();
     }
