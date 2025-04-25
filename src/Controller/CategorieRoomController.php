@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Doctrine\ORM\EntityManagerInterface;
 
+use App\DTO\RoomDTO;
 
 #[AsController]
 final class CategorieRoomController extends AbstractController
@@ -34,22 +35,14 @@ final class CategorieRoomController extends AbstractController
         // Récupérer tous les hôtels associés à la catégorie
         $hotels = $categorie->getHotels(); // Cette méthode doit exister dans Categorie
 
-        // Extraire les chambres de chaque hôtel
         $rooms = [];
+
         foreach ($hotels as $hotel) {
             foreach ($hotel->getRooms() as $room) {
-                $rooms[] = [
-                    'roomId' => $room->getId(),
-                    'roomName' => $room->getName(),
-                    'roomDescription' => $room->getDescription(),
-                    'roomBasePrice' => $room->getBasePrice(),
-                    'roomMaxGuests' => $room->getMaxGuests(),
-                    'hotelId' => $hotel->getId(),
-                    'hotelName' => $hotel->getName(),
-                ];
+                $rooms[] = new RoomDTO($room);
             }
         }
 
-        return $this->json($rooms);
+        return $this->json($rooms, 200, [], ['groups' => 'room:read']);
     }
 }

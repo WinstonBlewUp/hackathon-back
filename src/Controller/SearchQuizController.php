@@ -13,6 +13,8 @@ use App\Entity\Hotel;
 use App\Repository\HotelRepository;
 use App\Repository\RoomRepository;
 
+use App\DTO\RoomDTO;
+
 #[AsController]
 final class SearchQuizController extends AbstractController
 {
@@ -48,10 +50,10 @@ final class SearchQuizController extends AbstractController
         foreach ($hotels as $hotel) {
             $availableRooms = $this->roomRepository->findAvailableRoomsForHotel($hotel, $maxGuests, $startDate, $endDate);
             foreach ($availableRooms as $room) {
-                $rooms[] = $room;
+                $rooms[] = new RoomDTO($room);
             }
         }
 
-        return $this->json($rooms, 200);
+        return $this->json($rooms, 200, [], ['groups' => 'room:read']);
     }
 }

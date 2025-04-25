@@ -10,6 +10,8 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
 
 use App\Repository\RoomRepository;
 
+use App\DTO\RoomDTO;
+
 #[AsController]
 final class LastMinuteRoomController extends AbstractController
 {
@@ -23,6 +25,8 @@ final class LastMinuteRoomController extends AbstractController
 
         $rooms = $this->roomRepository->findAvailableRoomsForTonight($tonight, $tomorrow);
 
-        return $this->json($rooms);
+        $dtoRooms = array_map(fn($room) => new RoomDTO($room), $rooms);
+
+        return $this->json($dtoRooms, 200, [], ['groups' => 'room:read']);
     }
 }

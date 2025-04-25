@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Reservation;
 use App\Enum\NegociationEnum;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,6 +11,8 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
 use Doctrine\ORM\EntityManagerInterface;
 
 use App\Repository\NegociationRepository;
+
+use App\DTO\NegociationDTO;
 
 #[AsController]
 final class NegotiationResponseClientController extends AbstractController
@@ -31,6 +32,9 @@ final class NegotiationResponseClientController extends AbstractController
 
         $this->entityManager->flush();
 
-        return $this->json($negotiation, 201);
+
+        $dto = new NegociationDTO($negociation);
+
+        return $this->json($dto, 200, [], ['groups' => 'negociation:read']);
     }
 }

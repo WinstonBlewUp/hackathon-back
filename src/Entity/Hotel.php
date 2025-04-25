@@ -26,6 +26,9 @@ class Hotel
     #[ORM\Column(length: 255, name: 'HTL_ADRESS')]
     private ?string $address = null;
 
+    #[ORM\Column(length: 255, name: 'HTL_CODE_POSTAL')]
+    private ?string $codePostal = null;
+
     #[ORM\Column(length: 255, name: 'HTL_CITY')]
     private ?string $city = null;
 
@@ -119,6 +122,18 @@ class Hotel
     public function setAddress(string $address): static
     {
         $this->address = $address;
+
+        return $this;
+    }
+
+    public function getCodePostal(): ?string
+    {
+        return $this->codePostal;
+    }
+
+    public function setCodePostal(string $codePostal): static
+    {
+        $this->codePostal = $codePostal;
 
         return $this;
     }

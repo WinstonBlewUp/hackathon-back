@@ -9,6 +9,8 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 use App\Repository\NegociationRepository;
 
+use App\DTO\NegociationDTO;
+
 #[AsController]
 final class OpenNegotiationsController extends AbstractController
 {
@@ -20,32 +22,9 @@ final class OpenNegotiationsController extends AbstractController
     public function __invoke(int $id): JsonResponse
     {
         $openNegotiation = $this->negociationRepository->findOpenNegociationsByUser($id);
-        $openNegotiation = $this->negociationRepository->findOpenNegociationsByUser($id);
+        
+        $negotiationsWithRoomDetails = array_map(fn($negociation) => new NegociationDTO($negociation), $openNegotiation);
 
-        $negotiationsWithRoomDetails = array_map(function ($negociation) {
-            $room = $negociation->getRoom();
-            $hotel = $room->getHotel();
-
-            return [
-                'negociationId' => $negociation->getId(),
-                'requestedPrice' => $negociation->getRequestedPrice(),
-                'status' => $negociation->getStatus(),
-                'createdAt' => $negociation->getCreatedAt()->format('Y-m-d H:i:s'),
-                'responseAt' => $negociation->getResponseAt()->format('Y-m-d H:i:s'),
-                'challengePrice' => $negociation->getChallengePrice(),
-                'isClose' => $negociation->getIsClose(),
-                'user' => $negociation->getUser()->getId(),
-                'room' => [
-                    'roomId' => $room->getId(),
-                    'roomName' => $room->getName(),
-                    'roomDescription' => $room->getDescription(),
-                    'roomBasePrice' => $room->getBasePrice(),
-                    'roomMaxGuests' => $room->getMaxGuests(),
-                    'hotelId' => $hotel->getId(),
-                    'hotelName' => $hotel->getName(),
-                ],
-            ];
-        }, $openNegotiation);
-        return $this->json($negotiationsWithRoomDetails);
+        return $this->json($negotiationsWithRoomDetails, 200, [], ['groups' => 'negociation:read']);
     }
 }

@@ -10,6 +10,8 @@ use App\Repository\UserRepository;
 
 use App\Enum\ReservationEnum;
 
+use App\DTO\ReservationDTO;
+
 #[AsController]
 final class ReservationByUserController extends AbstractController
 {
@@ -29,19 +31,8 @@ final class ReservationByUserController extends AbstractController
             return $reservation->getStatus() === ReservationEnum::COMPLETED;
         });
 
-        $reservationsWithRoomDetails = array_map(function ($reservation) {
-            return [
-                'reservationId' => $reservation->getId(),
-                'roomId' => $reservation->getRoom()->getId(),
-                'roomName' => $reservation->getRoom()->getName(),
-                'roomDescription' => $reservation->getRoom()->getDescription(),
-                'roomBasePrice' => $reservation->getRoom()->getBasePrice(),
-                'roomMaxGuests' => $reservation->getRoom()->getMaxGuests(),
-                'hotelId' => $reservation->getRoom()->getHotel()->getId(),
-                'hotelName' => $reservation->getRoom()->getHotel()->getName(),
-            ];
-        }, $reservationsCompleted);
+        $reservationsDTO = array_map(fn($reservation) => new ReservationDTO($reservation), $reservationsCompleted);
 
-        return $this->json($reservationsWithRoomDetails, 200);
+        return $this->json($reservationsDTO, 200, [], ['groups' => 'reservation:read']);
     }
 }

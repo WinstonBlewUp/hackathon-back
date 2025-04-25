@@ -2,6 +2,7 @@ App\Entity\Hotel:
   hotel_template (template):
     name: <company()>
     address: <address()>
+    codePostal: <postcode()>
     city: <city()>
     country: <country()>
     description: <text()>
