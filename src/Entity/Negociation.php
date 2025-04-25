@@ -14,18 +14,33 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Enum\NegociationEnum;
 
+
+use App\Controller\NegociationResponseAutoController;
+use App\Controller\OpenNegotiationsController;
+
+
 #[ApiResource(
     operations: [
         new Get(),
         new GetCollection(),
-        new Post(), 
-        new Patch(),
-        new Delete(),
         new Get(
             uriTemplate: '/averageSavingsPercentage/{id}',
             controller: AverageSavingsPercentageController::class,
             name: 'average_savings_percentage'
-        )
+        ),
+        new Post(),
+        new Patch(),
+        new Delete(),
+        new Get(
+            uriTemplate: '/negotiation/open/{id}',
+            controller: OpenNegotiationsController::class,
+            name: 'negotiation_open',
+        ),
+        new Get(
+            uriTemplate: '/negociations/{id}/response/auto',
+            controller: NegociationResponseAutoController::class,
+            name: 'negociation_response_auto'
+        ),
     ]
 )]
 #[ORM\Entity(repositoryClass: NegociationRepository::class)]
@@ -52,9 +67,16 @@ class Negociation
     #[ORM\Column(length: 255, nullable: true, name: 'NEG_CHALLENGE_PRICE')]
     private ?int $challengePrice = null;
 
+    #[ORM\Column(name: 'NEG_IS_CLOSE', type: Types::BOOLEAN, nullable: false)]
+    private bool $isClose = false;
+
     #[ORM\ManyToOne(inversedBy: 'negociations')]
-    #[ORM\JoinColumn(name:'USR_ID',referencedColumnName:'USR_ID')]
+    #[ORM\JoinColumn(name: 'USR_ID', referencedColumnName: 'USR_ID')]
     private ?User $user = null;
+
+    #[ORM\ManyToOne(inversedBy: 'negociations')]
+    #[ORM\JoinColumn(name: 'ROOM_ID', referencedColumnName: 'ROOM_ID')]
+    private ?Room $room = null;
 
     public function getId(): int
     {
@@ -130,6 +152,29 @@ class Negociation
     {
         $this->user = $user;
 
+        return $this;
+    }
+
+    public function getRoom(): ?Room
+    {
+        return $this->room;
+    }
+
+    public function setRoom(?Room $room): static
+    {
+        $this->room = $room;
+
+        return $this;
+    }
+
+    public function getIsClose(): bool
+    {
+        return $this->isClose;
+    }
+
+    public function setIsClose(bool $isClose): self
+    {
+        $this->isClose = $isClose;
         return $this;
     }
 }

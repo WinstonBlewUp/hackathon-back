@@ -24,7 +24,7 @@ use App\Controller\RoomAvailableController;
     operations: [
         new Get(),
         new GetCollection(),
-        new Post(), 
+        new Post(),
         new Patch(),
         new Delete(),
         new Post(
@@ -86,7 +86,7 @@ class Room
     private Collection $users;
 
     #[ORM\ManyToOne(inversedBy: 'rooms')]
-    #[ORM\JoinColumn(name:'HTL_ID',referencedColumnName:'HTL_ID')]
+    #[ORM\JoinColumn(name: 'HTL_ID', referencedColumnName: 'HTL_ID')]
     #[Group(['room'])]
     private ?Hotel $hotel = null;
 
@@ -96,10 +96,17 @@ class Room
     #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'room')]
     private Collection $reservations;
 
+    /**
+     * @var Collection<int, Negociation>
+     */
+    #[ORM\OneToMany(targetEntity: Negociation::class, mappedBy: 'room')]
+    private Collection $negociations;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
         $this->reservations = new ArrayCollection();
+        $this->negociations = new ArrayCollection();
     }
 
     public function getId(): int
@@ -218,6 +225,36 @@ class Room
             // set the owning side to null (unless already changed)
             if ($reservation->getRoom() === $this) {
                 $reservation->setRoom(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Negociation>
+     */
+    public function getNegociations(): Collection
+    {
+        return $this->negociations;
+    }
+
+    public function addNegociation(Negociation $negociation): static
+    {
+        if (!$this->negociations->contains($negociation)) {
+            $this->negociations->add($negociation);
+            $negociation->setRoom($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNegociation(Negociation $negociation): static
+    {
+        if ($this->negociations->removeElement($negociation)) {
+            // set the owning side to null (unless already changed)
+            if ($negociation->getRoom() === $this) {
+                $negociation->setRoom(null);
             }
         }
 
