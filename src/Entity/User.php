@@ -12,6 +12,7 @@ use App\Repository\UserRepository;
 use App\Controller\LikedRoomByUserController;
 use App\Controller\UserExistController;
 use App\Controller\AverageSavingsPercentageController;
+use App\Controller\ReservationByUserController;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -40,6 +41,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
             read: false,
             name: 'average_savings_percentage'
         ),
+        new Get(
+            uriTemplate: '/user/{id}/reservations',
+            controller: ReservationByUserController::class,
+            name: 'user_reservations',
+            normalizationContext: ['groups' => ['room_like', 'hotel_like']],
+            denormalizationContext: ['groups' => ['room_like', 'hotel_like']]),
     ]
 )]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
