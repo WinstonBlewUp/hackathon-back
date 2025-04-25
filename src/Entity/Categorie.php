@@ -4,11 +4,6 @@ namespace App\Entity;
 
 
 use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\GetCollection;
-use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Patch;
-use ApiPlatform\Metadata\Delete;
 use App\Controller\CategorieRoomController;
 use App\Repository\CategorieRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -34,18 +29,6 @@ use App\Controller\CategorieController;
             controller: CategorieController::class,
             name: 'categories_rooms'
         ),
-    ]
-)]
-use Symfony\Component\Serializer\Annotation\Groups;
-
-// #[ApiResource]
-#[ApiResource(
-    operations: [
-        new Get(),
-        new GetCollection(),
-        new Post(),
-        new Patch(),
-        new Delete(),
         new Get(
             uriTemplate: '/categories/{id}/room',
             controller: CategorieRoomController::class,
@@ -53,6 +36,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
         ),
     ]
 )]
+
 #[ORM\Entity(repositoryClass: CategorieRepository::class)]
 #[ORM\Table(name: 'MTC_CATEGORIE')]
 class Categorie
