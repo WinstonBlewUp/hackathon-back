@@ -11,18 +11,18 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
 use App\Repository\UserRepository;
 
 #[AsController]
-final class UserExistController extends AbstractController
+final class UserLoginController extends AbstractController
 {
-    public function __construct(private UserRepository $userRepository){}
+    public function __construct(private UserRepository $userRepository) {}
 
     public function __invoke(string $email, string $password): JsonResponse
     {
         $user = $this->userRepository->findOneBy(['email' => $email, 'password' => $password]);
-        
+
         if (!$user) {
             throw $this->createNotFoundException('Utilisateur non trouvé');
         }
-        
+
         return $this->json($user);
     }
 }

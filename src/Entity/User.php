@@ -10,10 +10,10 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Delete;
 use App\Repository\UserRepository;
 use App\Controller\LikedRoomByUserController;
-use App\Controller\UserExistController;
 use App\Controller\AverageSavingsPercentageController;
 use App\Controller\ReservationByUserController;
 use App\Controller\UserLikedRoomsController;
+use App\Controller\UserLoginController;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -23,7 +23,7 @@ use Doctrine\DBAL\Types\Types;
     operations: [
         new Get(),
         new GetCollection(),
-        new Post(), 
+        new Post(),
         new Patch(),
         new Delete(),
         new Get(
@@ -32,9 +32,9 @@ use Doctrine\DBAL\Types\Types;
             name: 'get_user_likes'
         ),
         new Get(
-            uriTemplate: '/exist/{email}/{password}',
-            controller: UserExistController::class,
-            name: 'user_exist'
+            uriTemplate: '/login/{email}/{password}',
+            controller: UserLoginController::class,
+            name: 'user_login'
         ),
         new Get(
             uriTemplate: 'user/{id}/averageSavingsPercentage',
@@ -80,10 +80,10 @@ class User
     #[ORM\Column(length: 255, name: 'USR_RESET_TOKEN')]
     private ?string $resetToken = null;
 
-    #[ORM\Column(name : 'USR_ROLE')]
+    #[ORM\Column(name: 'USR_ROLE')]
     private array $role = [];
 
-    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, name : 'USR_CREATED_AT')]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, name: 'USR_CREATED_AT')]
     private ?\DateTimeImmutable $createdAt = null;
 
     /**
