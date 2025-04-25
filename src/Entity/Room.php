@@ -18,14 +18,19 @@ use App\Controller\SearchQuizController;
 use App\Controller\LastMinuteRoomController;
 use App\Controller\RecommandationRoomControlerController;
 use App\Controller\RoomAvailableController;
+use App\Controller\AllRoomsController;
 
 #[ApiResource(
     operations: [
-        new Get(),
-        new GetCollection(),
         new Post(),
         new Patch(),
         new Delete(),
+        new GetCollection(
+            uriTemplate: '/rooms',
+            controller: AllRoomsController::class,
+            read: false,
+            deserialize: false
+        ),
         new Post(
             uriTemplate: '/rooms/search/quiz',
             controller: SearchQuizController::class,
