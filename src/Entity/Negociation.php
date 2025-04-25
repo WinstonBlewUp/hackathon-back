@@ -16,7 +16,6 @@ use App\Enum\NegociationEnum;
 use App\Controller\NegociationResponseAutoController;
 use App\Controller\OpenNegotiationsController;
 
-use function PHPSTORM_META\type;
 
 #[ApiResource(
     operations: [
@@ -26,7 +25,7 @@ use function PHPSTORM_META\type;
         new Patch(),
         new Delete(),
         new Get(
-            uriTemplate: '/negotiation/{id}',
+            uriTemplate: '/negotiation/open/{id}',
             controller: OpenNegotiationsController::class,
             name: 'negotiation_open',
         ),

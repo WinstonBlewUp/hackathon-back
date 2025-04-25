@@ -42,10 +42,8 @@ final class OpenNegotiationsController extends AbstractController
                     'roomDescription' => $room->getDescription(),
                     'roomBasePrice' => $room->getBasePrice(),
                     'roomMaxGuests' => $room->getMaxGuests(),
-                    'hotel' => [
-                        'hotelId' => $hotel->getId(),
-                        'hotelName' => $hotel->getName(),
-                    ]
+                    'hotelId' => $hotel->getId(),
+                    'hotelName' => $hotel->getName(),
                 ],
             ];
         }, $openNegotiation);
