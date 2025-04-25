@@ -72,6 +72,11 @@ class Negociation
     #[ORM\JoinColumn(name: 'ROOM_ID', referencedColumnName: 'ROOM_ID')]
     private ?Room $room = null;
 
+    public function __construct()
+    {
+        $this->status = NegociationEnum::PENDING_HOTELIER;
+    }
+
     public function getId(): int
     {
         return $this->id;
