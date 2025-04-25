@@ -17,15 +17,14 @@ class NegociationRepository extends ServiceEntityRepository
         parent::__construct($registry, Negociation::class);
     }
 
-    public function findByStatus(NegociationEnum $status): array
+    public function findByStatuses(array $statuses): array
     {
         return $this->createQueryBuilder('n')
-            ->andWhere('n.status = :status')
-            ->setParameter('status', $status)
+            ->andWhere('n.status IN (:statuses)')
+            ->setParameter('statuses', $statuses)
             ->getQuery()
             ->getResult();
     }
-
 
     //    /**
     //     * @return Negociation[] Returns an array of Negociation objects

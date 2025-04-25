@@ -13,9 +13,8 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Enum\NegociationEnum;
 
-use App\Controller\PendingNegociationClientController;
-use App\Controller\PendingNegociationHotelierController;
 use App\Controller\NegociationResponseAutoController;
+use App\Controller\PendingNegociationsController;
 
 #[ApiResource(
     operations: [
@@ -25,14 +24,9 @@ use App\Controller\NegociationResponseAutoController;
         new Patch(),
         new Delete(),
         new GetCollection(
-            uriTemplate: '/negociations/status/pending/client',
-            controller: PendingNegociationClientController::class,
-            name: 'negociation_pending_client'
-        ),
-        new GetCollection(
-            uriTemplate: '/negociations/status/pending/hotelier',
-            controller: PendingNegociationHotelierController::class,
-            name: 'negociation_pending_hotelier'
+            uriTemplate: '/negociation/pending',
+            controller: PendingNegociationsController::class,
+            name: 'negociation_pending',
         ),
         new Get(
             uriTemplate: '/negociations/{id}/response/auto',

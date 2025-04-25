@@ -12,14 +12,14 @@ use App\Repository\NegociationRepository;
 use App\Enum\NegociationEnum;
 
 #[AsController]
-final class PendingNegociationClientController extends AbstractController
+final class PendingNegociationsController extends AbstractController
 {
     public function __construct(private NegociationRepository $negociationRepository) {}
 
     public function __invoke(): JsonResponse
     {
-        $negotiations = $this->negociationRepository->findByStatus(NegociationEnum::PENDING_CLIENT);
+        $pendingNegotations = $this->negociationRepository->findByStatuses([NegociationEnum::PENDING_HOTELIER, NegociationEnum::PENDING_CLIENT]);
 
-        return $this->json($negotiations);
+        return $this->json($pendingNegotations);
     }
 }
