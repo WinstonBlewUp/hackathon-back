@@ -19,6 +19,7 @@ use App\Controller\OpenNegotiationsController;
 use App\Controller\CloseNegotiationController;
 use App\Controller\NegotiationResponseHotelController;
 use App\Controller\NegotiationResponseClientController;
+use App\Controller\NegotiationRoomAvailableController;
 
 #[ApiResource(
     operations: [
@@ -51,6 +52,12 @@ use App\Controller\NegotiationResponseClientController;
             uriTemplate: '/negociations/{id}/response/client',
             controller: NegotiationResponseClientController::class,
             name: 'negociation_response_client'
+        ),
+        // A modifier en patch
+        new Get(
+            uriTemplate: '/negotiation/room/available/{id}',
+            controller: NegotiationRoomAvailableController::class,
+            name: 'negotiation_room_available',
         ),
     ]
 )]

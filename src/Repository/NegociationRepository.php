@@ -51,19 +51,16 @@ class NegociationRepository extends ServiceEntityRepository
         $negociationStartDate = $negociation->getStartDate()->format('Y-m-d H:i:s');
         $negociationEndDate = $negociation->getEndDate()->format('Y-m-d H:i:s');
 
-        $dql = "
-            SELECT COUNT(r) > 0
+        $sql = "
+            SELECT COUNT(res)
             FROM App\Entity\Reservation res
             JOIN res.room r
             WHERE r.id = :roomId
-            AND (
-                (res.startDate < :negociationEndDate AND res.endDate > :negociationStartDate)
-                OR
-                (res.startDate < :negociationStartDate AND res.endDate > :negociationStartDate)
-            )
+            AND res.startDate < :negociationEndDate
+            AND res.endDate > :negociationStartDate
         ";
 
-        $query = $this->getEntityManager()->createQuery($dql);
+        $query = $this->getEntityManager()->createQuery($sql);
         $query->setParameter('roomId', $room->getId());
         $query->setParameter('negociationStartDate', $negociationStartDate);
         $query->setParameter('negociationEndDate', $negociationEndDate);
