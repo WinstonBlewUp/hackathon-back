@@ -53,7 +53,7 @@ use App\Controller\RoomSearchController;
             denormalizationContext: ['groups' => ['room', 'hotel', 'category']]
         ),
         new Get(
-            uriTemplate: '/rooms/search',
+            uriTemplate: '/rooms/search/{search}',
             controller: RoomSearchController::class,
             read: false,
             name: 'room_search',

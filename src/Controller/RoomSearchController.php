@@ -13,9 +13,8 @@ final class RoomSearchController extends AbstractController
 {
     public function __construct(private RoomRepository $roomRepository) {}
 
-    public function __invoke(Request $request): JsonResponse
+    public function __invoke(string $search): JsonResponse
     {
-        $search = $request->query->get('search');
 
         if (empty($search)) {
             return $this->json(['error' => 'Search term is required'], 400);
@@ -23,6 +22,21 @@ final class RoomSearchController extends AbstractController
 
         $rooms = $this->roomRepository->searchRoomsByTerm($search);
 
-        return $this->json($rooms, 200, [], ['groups' => ['room', 'hotel']]);
+        $roomsWithHotelDetails = array_map(function ($room) {
+            return [
+                'roomId' => $room->getId(),
+                'roomName' => $room->getName(),
+                'roomDescription' => $room->getDescription(),
+                'roomBasePrice' => $room->getBasePrice(),
+                'roomMaxGuests' => $room->getMaxGuests(),
+                'hotelId' => $room->getHotel()->getId(),
+                'hotelName' => $room->getHotel()->getName(),
+            ];
+        }, $rooms);
+
+        return $this->json([
+            'total' => count($roomsWithHotelDetails),
+            'rooms' => $roomsWithHotelDetails
+        ], 200);
     }
 }

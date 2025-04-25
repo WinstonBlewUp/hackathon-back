@@ -91,9 +91,9 @@ class RoomRepository extends ServiceEntityRepository
     public function searchRoomsByTerm(string $term): array
     {
         $qb = $this->createQueryBuilder('r')
-            ->where('r.name LIKE :term')
-            ->orWhere('r.description LIKE :term')
-            ->setParameter('term', '%' . $term . '%');
+            ->where('LOWER(r.name) LIKE LOWER(:term) OR LOWER(r.description) LIKE LOWER(:term)')
+            ->setParameter('term', '%' . $term . '%')
+            ->orderBy('r.name', 'ASC'); 
 
         return $qb->getQuery()->getResult();
     }
