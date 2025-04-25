@@ -13,6 +13,8 @@ use App\Repository\NegociationRepository;
 use App\Repository\HotelRepository;
 use App\Enum\NegociationEnum;
 
+use App\DTO\NegociationDTO;
+
 #[AsController]
 final class NegociationResponseAutoController extends AbstractController
 {
@@ -62,7 +64,9 @@ final class NegociationResponseAutoController extends AbstractController
 
         $this->entityManager->flush(); 
 
-        return $this->json($negociation);
+        $dto = new NegociationDTO($negociation);
+
+        return $this->json($dto, 200, [], ['groups' => 'negociation:read']);
 
     }
 }

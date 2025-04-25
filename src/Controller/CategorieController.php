@@ -12,6 +12,8 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
 use App\Repository\CategorieRepository;
 use App\Repository\RoomRepository;
 
+use App\DTO\RoomDTO;
+
 #[AsController]
 final class CategorieController extends AbstractController
 {
@@ -28,6 +30,8 @@ final class CategorieController extends AbstractController
 
         $rooms = $this->roomRepository->findAvailableRoomsByCategoryAndDates($id, $startDate, $endDate);
 
-        return $this->json($rooms);
+        $dtoRooms = array_map(fn($room) => new RoomDTO($room), $rooms);
+
+        return $this->json($dtoRooms, 200, [], ['groups' => 'room:read']);
     } 
 }

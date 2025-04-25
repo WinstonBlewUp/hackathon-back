@@ -10,6 +10,8 @@ use App\Repository\RoomRepository;
 use App\Repository\CategorieRepository;
 use App\Repository\ReservationRepository;
 
+use App\DTO\RoomDTO;
+
 #[AsController]
 final class RecommandationRoomControlerController extends AbstractController
 {
@@ -35,21 +37,12 @@ final class RecommandationRoomControlerController extends AbstractController
 
             $rooms = array_slice($rooms, 0, 5);
 
-            // Format each room into the desired structure
             foreach ($rooms as $room) {
-                $recommendedRooms[] = [
-                    'roomId' => $room->getId(),
-                    'roomName' => $room->getName(),
-                    'roomDescription' => $room->getDescription(),
-                    'roomBasePrice' => $room->getBasePrice(),
-                    'roomMaxGuests' => $room->getMaxGuests(),
-                    'roomUsers' => array_map(fn($user) => $user->getEmail(), $room->getUsers()->toArray()),
-                    'hotelId' => $room->getHotel()->getId(),
-                    'hotelName' => $room->getHotel()->getName(),
-                ];
+                $recommendedRooms[] = new RoomDTO($room);
             }
+            
         }
 
-        return $this->json($recommendedRooms);
+        return $this->json($recommendedRooms, 200, [], ['groups' => 'room:read']);
     }
 }

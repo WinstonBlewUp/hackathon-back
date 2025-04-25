@@ -10,6 +10,8 @@ use App\Repository\UserRepository;
 
 use App\Enum\ReservationEnum;
 
+use App\DTO\ReservationDTO;
+
 #[AsController]
 final class ReservationByUserController extends AbstractController
 {
@@ -29,6 +31,8 @@ final class ReservationByUserController extends AbstractController
             return $reservation->getStatus() === ReservationEnum::COMPLETED;
         });
 
-        return $this->json($reservationsCompleted);
+        $reservationsDTO = array_map(fn($reservation) => new ReservationDTO($reservation), $reservationsCompleted);
+
+        return $this->json($reservationsDTO, 200, [], ['groups' => 'reservation:read']);
     }
 }

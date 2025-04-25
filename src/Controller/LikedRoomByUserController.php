@@ -8,6 +8,8 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
 
 use App\Repository\UserRepository;
 
+use App\DTO\RoomDTO;
+
 #[AsController]
 final class LikedRoomByUserController extends AbstractController
 {
@@ -25,18 +27,8 @@ final class LikedRoomByUserController extends AbstractController
 
         $roomLikedArray = $roomLiked->toArray();
 
-        $roomLikedWithHotelDetails = array_map(function ($room) {
-            return [
-                'roomId' => $room->getId(),
-                'roomName' => $room->getName(),
-                'roomDescription' => $room->getDescription(),
-                'roomBasePrice' => $room->getBasePrice(),
-                'roomMaxGuests' => $room->getMaxGuests(),
-                'hotelId' => $room->getHotel()->getId(),
-                'hotelName' => $room->getHotel()->getName(),
-            ];
-        }, $roomLikedArray);
+        $rooms = array_map(fn($room) => new RoomDTO($room), $roomLikedArray);
 
-        return $this->json($roomLikedWithHotelDetails);
+        return $this->json($rooms, 200, [], ['groups' => 'room:read']);
     }
 }
