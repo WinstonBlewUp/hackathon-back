@@ -90,12 +90,10 @@ class RoomRepository extends ServiceEntityRepository
 
     public function searchRoomsByTerm(string $term): array
     {
-        $qb = $this->createQueryBuilder('r')
-            ->join('r.hotel', 'h') // Jointure avec l'entité Hotel
-            ->addSelect('h') // Inclure les détails de l'hôtel dans les résultats
-            ->where('LOWER(r.name) LIKE LOWER(:term) OR LOWER(r.description) LIKE LOWER(:term)')
+        $qb = $this->createQueryBuilder('room')
+            ->where('LOWER(room.name) LIKE LOWER(:term) OR LOWER(room.description) LIKE LOWER(:term)')
             ->setParameter('term', '%' . $term . '%')
-            ->orderBy('r.name', 'ASC');
+            ->orderBy('room.name', 'ASC');
 
         return $qb->getQuery()->getResult();
     }

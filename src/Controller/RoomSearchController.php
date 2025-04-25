@@ -13,8 +13,9 @@ final class RoomSearchController extends AbstractController
 {
     public function __construct(private RoomRepository $roomRepository) {}
 
-    public function __invoke(string $search): JsonResponse
+    public function __invoke(Request $request): JsonResponse
     {
+        $search = $request->get('search');
 
         if (empty($search)) {
             return $this->json(['error' => 'Search term is required'], 400);
