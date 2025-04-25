@@ -4,9 +4,9 @@ App\Entity\Negociation:
     createdAt: <dateTimeBetween('-2 years', '-1 years')>
     responseAt: '<($createdAt->modify("+1 day"))>'
     challengePrice: '<(rand(0, 1) ? $requestedPrice - (10 + rand(0, 30)) : null)>'
+    isClose: <boolean()>
     user: '@user_*'
     room: '@room_*'
-    isClose: false
 
     
   negociation_pending_hotelier_{1..50} (extends negociation_template):

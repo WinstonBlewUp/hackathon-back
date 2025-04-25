@@ -11,7 +11,7 @@ use ApiPlatform\Metadata\Delete;
 use App\Repository\UserRepository;
 use App\Controller\LikedRoomByUserController;
 use App\Controller\UserExistController;
-use App\Controller\UserReservationController;
+use App\Controller\AverageSavingsPercentageController;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -32,12 +32,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new Get(
             uriTemplate: '/exist/{email}/{password}',
             controller: UserExistController::class,
-            name: 'user_exist'
-        ),
-        new GetCollection(
-                uriTemplate: '/reservations/{id}',
-                controller: UserReservationController::class,
-                name: 'user_reservations'
+            name: 'user_exist'),
+        new Get(
+            uriTemplate: 'user/{id}/averageSavingsPercentage',
+            controller: AverageSavingsPercentageController::class,
+            read: false,
+            name: 'average_savings_percentage'
         ),
     ]
 )]
