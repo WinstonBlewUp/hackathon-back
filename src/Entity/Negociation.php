@@ -17,7 +17,10 @@ use App\Enum\NegociationEnum;
 
 use App\Controller\NegociationResponseAutoController;
 use App\Controller\OpenNegotiationsController;
-
+use App\Controller\CloseNegotiationController;
+use App\Controller\NegotiationResponseHotelController;
+use App\Controller\NegotiationResponseClientController;
+use App\Controller\NegotiationRoomAvailableController;
 
 #[ApiResource(
     operations: [
@@ -36,10 +39,31 @@ use App\Controller\OpenNegotiationsController;
             controller: OpenNegotiationsController::class,
             name: 'negotiation_open',
         ),
-        new Get(
+        new Patch(
             uriTemplate: '/negociations/{id}/response/auto',
             controller: NegociationResponseAutoController::class,
             name: 'negociation_response_auto'
+        ),
+        new Patch(
+            uriTemplate: '/negociations/close/{id}',
+            controller: CloseNegotiationController::class,
+            name: 'negotiation_close'
+        ),
+        new Patch(
+            uriTemplate: '/negociations/{id}/response/hotel',
+            controller: NegotiationResponseHotelController::class,
+            name: 'negociation_response_hotel'
+        ),
+        new Patch(
+            uriTemplate: '/negociations/{id}/response/client',
+            controller: NegotiationResponseClientController::class,
+            name: 'negociation_response_client'
+        ),
+        // A modifier en patch
+        new Get(
+            uriTemplate: '/negotiation/room/available/{id}',
+            controller: NegotiationRoomAvailableController::class,
+            name: 'negotiation_room_available',
         ),
     ]
 )]
@@ -58,10 +82,10 @@ class Negociation
     #[ORM\Column(name: 'NEG_STATUS', enumType: NegociationEnum::class)]
     private NegociationEnum $status;
 
-    #[ORM\Column(type: Types::DATE_IMMUTABLE, name: 'NEG_CREATED_AT')]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, name: 'NEG_CREATED_AT')]
     private \DateTimeImmutable $createdAt;
 
-    #[ORM\Column(type: Types::DATE_IMMUTABLE, name: 'NEG_RESPONSE_AT')]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, name: 'NEG_RESPONSE_AT')]
     private \DateTimeImmutable $responseAt;
 
     #[ORM\Column(length: 255, nullable: true, name: 'NEG_CHALLENGE_PRICE')]
@@ -77,6 +101,17 @@ class Negociation
     #[ORM\ManyToOne(inversedBy: 'negociations')]
     #[ORM\JoinColumn(name: 'ROOM_ID', referencedColumnName: 'ROOM_ID')]
     private ?Room $room = null;
+
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, name: 'NEG_START_DATE')]
+    private \DateTimeImmutable $startDate;
+
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, name: 'NEG_END_DATE')]
+    private \DateTimeImmutable $endDate;
+
+    public function __construct()
+    {
+        $this->status = NegociationEnum::PENDING_HOTELIER;
+    }
 
     public function getId(): int
     {
@@ -175,6 +210,30 @@ class Negociation
     public function setIsClose(bool $isClose): self
     {
         $this->isClose = $isClose;
+        return $this;
+    }
+
+    public function getStartDate(): \DateTimeImmutable
+    {
+        return $this->startDate;
+    }
+
+    public function setStartDate(\DateTimeImmutable $startDate): static
+    {
+        $this->startDate = $startDate;
+
+        return $this;
+    }
+
+    public function getEndDate(): \DateTimeImmutable
+    {
+        return $this->endDate;
+    }
+
+    public function setEndDate(\DateTimeImmutable $endDate): static
+    {
+        $this->endDate = $endDate;
+
         return $this;
     }
 }
