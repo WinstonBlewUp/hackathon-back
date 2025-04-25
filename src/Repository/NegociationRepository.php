@@ -17,6 +17,16 @@ class NegociationRepository extends ServiceEntityRepository
         parent::__construct($registry, Negociation::class);
     }
 
+    public function findAcceptedNegociationsByUserId(int $userId): array
+    {
+        return $this->createQueryBuilder('n')
+            ->where('n.status = :status')
+            ->andWhere('n.user = :userId')
+            ->setParameter('status', 'accepted')
+            ->setParameter('userId', $userId)
+            ->getQuery()
+            ->getResult();
+    }
     public function findOpenNegociationsByUser(int $userId): array
     {
         return $this->createQueryBuilder('n')
