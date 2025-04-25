@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Doctrine\ORM\EntityManagerInterface;
 
 use App\Repository\NegociationRepository;
 use App\Repository\HotelRepository;
@@ -15,7 +16,7 @@ use App\Enum\NegociationEnum;
 #[AsController]
 final class NegociationResponseAutoController extends AbstractController
 {
-    public function __construct(private NegociationRepository $negociationRepository, private HotelRepository $hotelRepository) {}
+    public function __construct(private NegociationRepository $negociationRepository, private HotelRepository $hotelRepository, private EntityManagerInterface $entityManager ) {}
 
     public function __invoke(int $id): JsonResponse
     {
@@ -58,6 +59,8 @@ final class NegociationResponseAutoController extends AbstractController
         } elseif ($isUnderMax) {
             $negociation->setStatus(NegociationEnum::REFUSED_HOTELIER);
         }
+
+        $this->entityManager->flush(); 
 
         return $this->json($negociation);
 

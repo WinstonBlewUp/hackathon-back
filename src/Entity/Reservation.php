@@ -38,13 +38,13 @@ class Reservation
     #[ORM\Column(name: 'RES_ID')]
     private int $id;
 
-    #[ORM\Column(type: Types::DATE_IMMUTABLE, name: 'RES_CREATED_AT')]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, name: 'RES_CREATED_AT')]
     private \DateTimeImmutable $createdAt;
 
-    #[ORM\Column(type: Types::DATE_IMMUTABLE, name: 'RES_START_DATE')]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, name: 'RES_START_DATE')]
     private \DateTimeImmutable $startDate;
 
-    #[ORM\Column(type: Types::DATE_IMMUTABLE, name: 'RES_END_DATE')]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, name: 'RES_END_DATE')]
     private \DateTimeImmutable $endDate;
 
     #[ORM\Column(name: 'RES_PRICE')]

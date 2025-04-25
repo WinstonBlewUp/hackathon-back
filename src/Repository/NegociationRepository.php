@@ -53,6 +53,33 @@ class NegociationRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function isRoomReservedDuringNegotiation(Negociation $negociation): bool
+    {
+        $room = $negociation->getRoom();
+
+        if (!$room) {
+            return false;
+        }
+
+        $negociationStartDate = $negociation->getStartDate()->format('Y-m-d H:i:s');
+        $negociationEndDate = $negociation->getEndDate()->format('Y-m-d H:i:s');
+
+        $sql = "
+            SELECT COUNT(res)
+            FROM App\Entity\Reservation res
+            JOIN res.room r
+            WHERE r.id = :roomId
+            AND res.startDate < :negociationEndDate
+            AND res.endDate > :negociationStartDate
+        ";
+
+        $query = $this->getEntityManager()->createQuery($sql);
+        $query->setParameter('roomId', $room->getId());
+        $query->setParameter('negociationStartDate', $negociationStartDate);
+        $query->setParameter('negociationEndDate', $negociationEndDate);
+
+        return (bool) $query->getSingleScalarResult();
+    }
 
     //    /**
     //     * @return Negociation[] Returns an array of Negociation objects

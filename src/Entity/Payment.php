@@ -33,7 +33,7 @@ class Payment
     #[ORM\Column(length: 255, name: 'PAY_RECEIPT')]
     private ?string $receiptUrl = null;
 
-    #[ORM\Column(type: Types::DATE_IMMUTABLE, name: 'PAY_CREATED_AT')]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, name: 'PAY_CREATED_AT')]
     private \DateTimeImmutable $createdAt;
 
     #[ORM\ManyToOne(inversedBy: 'payments')]
