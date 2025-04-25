@@ -55,7 +55,33 @@ final class NegotiationCreateController
         $negotiation->setResponseAt(new \DateTimeImmutable()); // Initialisé maintenant, pourra être mis à jour plus tard
         $negotiation->setStartDate(new \DateTimeImmutable($startDate));
         $negotiation->setEndDate(new \DateTimeImmutable($endDate));
+        $hotel = $room->getHotel(); // si la relation existe
+        $basePrice = $room->getBasePrice();
+        $requestedPrice = $negotiation->getRequestedPrice();
 
+        $threshold = $hotel->getThresholds()->filter(function ($seuil) {
+            return $seuil->getStartDate() === null && $seuil->getEndDate() === null;
+        })->first();
+
+        if (!$threshold) {
+            return $this->json(['error' => 'Aucun seuil général trouvé pour cet hôtel'], 404);
+        }
+
+        $seuilMin = $threshold->getMinimum();
+        $seuilMax = $threshold->getMaximum();
+
+        $minAllowed = $basePrice * ($seuilMin / 100);
+        $maxAllowed = $basePrice * ($seuilMax / 100);
+
+        $isExactlyMin = $requestedPrice == $minAllowed;
+        $isUnderMax = $requestedPrice < $maxAllowed;
+        $isBetweenBaseAndMin = $requestedPrice < $basePrice && $requestedPrice > $minAllowed;
+
+        if ($isExactlyMin || $isBetweenBaseAndMin) {
+            $negotiation->setStatus(NegociationEnum::PENDING_CLIENT);
+        } elseif ($isUnderMax) {
+            $negotiation->setStatus(NegociationEnum::REFUSED_HOTELIER);
+        }
         $this->em->persist($negotiation);
         $this->em->flush();
 
