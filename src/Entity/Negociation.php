@@ -17,6 +17,7 @@ use App\Enum\NegociationEnum;
 use App\Controller\NegociationResponseAutoController;
 use App\Controller\OpenNegotiationsController;
 use App\Controller\CloseNegotiationController;
+use App\Controller\NegotiationResponseHotelController;
 
 #[ApiResource(
     operations: [
@@ -39,6 +40,11 @@ use App\Controller\CloseNegotiationController;
             uriTemplate: '/negociations/close/{id}',
             controller: CloseNegotiationController::class,
             name: 'negotiation_close'
+        ),
+        new Patch(
+            uriTemplate: '/negociations/{id}/response/hotel',
+            controller: NegotiationResponseHotelController::class,
+            name: 'negociation_response_hotel'
         ),
     ]
 )]
@@ -76,6 +82,12 @@ class Negociation
     #[ORM\ManyToOne(inversedBy: 'negociations')]
     #[ORM\JoinColumn(name: 'ROOM_ID', referencedColumnName: 'ROOM_ID')]
     private ?Room $room = null;
+
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, name: 'NEG_START_DATE')]
+    private \DateTimeImmutable $startDate;
+
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, name: 'NEG_END_DATE')]
+    private \DateTimeImmutable $endDate;
 
     public function __construct()
     {
@@ -179,6 +191,30 @@ class Negociation
     public function setIsClose(bool $isClose): self
     {
         $this->isClose = $isClose;
+        return $this;
+    }
+
+    public function getStartDate(): \DateTimeImmutable
+    {
+        return $this->startDate;
+    }
+
+    public function setStartDate(\DateTimeImmutable $startDate): static
+    {
+        $this->startDate = $startDate;
+
+        return $this;
+    }
+
+    public function getEndDate(): \DateTimeImmutable
+    {
+        return $this->endDate;
+    }
+
+    public function setEndDate(\DateTimeImmutable $endDate): static
+    {
+        $this->endDate = $endDate;
+
         return $this;
     }
 }

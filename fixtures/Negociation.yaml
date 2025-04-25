@@ -7,6 +7,8 @@ App\Entity\Negociation:
     isClose: <boolean()>
     user: '@user_*'
     room: '@room_*'
+    startDate: <dateTimeBetween('-1 years', 'now')>
+    endDate: '<($startDate->modify("+1 week"))>'
 
   negociation_pending_hotelier_{1..50} (extends negociation_template):
     status: !php/const App\Enum\NegociationEnum::PENDING_HOTELIER
