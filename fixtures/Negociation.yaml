@@ -15,9 +15,6 @@ App\Entity\Negociation:
   negociation_pending_client_{1..50} (extends negociation_template):
     status: !php/const App\Enum\NegociationEnum::PENDING_CLIENT
 
-  negociation_accepted_hotelier_{1..50} (extends negociation_template):
-    status: !php/const App\Enum\NegociationEnum::ACCEPTED_HOTELIER
-
   negociation_refused_hotelier_{1..50} (extends negociation_template):
     status: !php/const App\Enum\NegociationEnum::REFUSED_HOTELIER
   

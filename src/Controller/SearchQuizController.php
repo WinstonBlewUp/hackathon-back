@@ -52,6 +52,14 @@ final class SearchQuizController extends AbstractController
             }
         }
 
+        // return $this->json([
+        //     'data' => $data,
+        //     'startDate' => $startDate?->format('Y-m-d'),
+        //     'endDate' => $endDate?->format('Y-m-d'),
+        //     'maxGuests' => $maxGuests,
+        //     'criteria' => $criteriaHotel,
+        // ]);
+        
         return $this->json($rooms, 200);
     }
 }

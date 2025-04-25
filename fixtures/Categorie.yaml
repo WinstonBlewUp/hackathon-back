@@ -1,15 +1,15 @@
 App\Entity\Categorie:
   categorie_1:
-    label: '1 étoile'
+    label: 'Montagne'
 
   categorie_2:
-    label: '2 étoiles'
+    label: 'Plage'
 
   categorie_3:
-    label: '3 étoiles'
+    label: 'Forêt'
 
   categorie_4:
-    label: '4 étoiles'
+    label: 'Tropic'
 
   categorie_5:
-    label: '5 étoiles'
+    label: 'Neige'
