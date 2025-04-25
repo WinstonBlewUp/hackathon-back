@@ -2,9 +2,8 @@
 
 namespace App\Controller;
 
+use App\Enum\NegociationEnum;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -12,28 +11,27 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
 use Doctrine\ORM\EntityManagerInterface;
 
 use App\Repository\NegociationRepository;
-use App\Enum\NegociationEnum;
+
 use App\DTO\NegociationDTO;
 
 #[AsController]
 final class NegotiationResponseClientController extends AbstractController
 {
-    public function __construct(private NegociationRepository $negociationRepository, private EntityManagerInterface $entityManager ) {}
+    public function __construct(private NegociationRepository $negociationRepository, private EntityManagerInterface $entityManager) {}
 
     public function __invoke(int $id, Request $request): JsonResponse
     {
-        $negociation = $this->negociationRepository->find($id);
-
-        $data = json_decode($request->getContent(), true);
-
-        $isDeclined = $data['isDeclined'] ?? null;
-
-        if ($isDeclined == true){
-            $negociation->setStatus(NegociationEnum::REFUSED_CLIENT);
-            $negociation->setIsClose(true);
+        $negotiation = $this->negociationRepository->find($id);
+        if (!$negotiation) {
+            throw new NotFoundHttpException('Negotiation not found');
         }
+        $data = json_decode($request->getContent(), true);
+        $negotiation->setStatus(NegociationEnum::from($data['status']) ?? $negotiation->getStatus());
+        $negotiation->setIsClose($data['isClose'] ?? true);
+
 
         $this->entityManager->flush();
+
 
         $dto = new NegociationDTO($negociation);
 

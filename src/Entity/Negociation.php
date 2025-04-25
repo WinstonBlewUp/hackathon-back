@@ -15,9 +15,10 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Enum\NegociationEnum;
 
 
-use App\Controller\NegociationResponseAutoController;
 use App\Controller\OpenNegotiationsController;
 use App\Controller\CloseNegotiationController;
+use App\Controller\NegotiationCreateController;
+use App\Controller\NegotiationResponseClientAcceptController;
 use App\Controller\NegotiationResponseHotelController;
 use App\Controller\NegotiationResponseClientController;
 use App\Controller\NegotiationRoomAvailableController;
@@ -26,7 +27,6 @@ use App\Controller\NegotiationRoomAvailableController;
     operations: [
         new Get(),
         new GetCollection(),
-        new Post(),
         new Patch(),
         new Delete(),
         new Get(
@@ -40,11 +40,6 @@ use App\Controller\NegotiationRoomAvailableController;
             name: 'negotiation_open',
         ),
         new Patch(
-            uriTemplate: '/negociations/{id}/response/auto',
-            controller: NegociationResponseAutoController::class,
-            name: 'negociation_response_auto'
-        ),
-        new Patch(
             uriTemplate: '/negociations/close/{id}',
             controller: CloseNegotiationController::class,
             name: 'negotiation_close'
@@ -54,10 +49,20 @@ use App\Controller\NegotiationRoomAvailableController;
             controller: NegotiationResponseHotelController::class,
             name: 'negociation_response_hotel'
         ),
-        new Patch(
-            uriTemplate: '/negociations/{id}/response/client',
+        new Get(
+            uriTemplate: '/negociations/{id}/client/accept',
+            controller: NegotiationResponseClientAcceptController::class,
+            name: 'negociation_accept_client'
+        ),
+        new Post(
+            uriTemplate: '/negociations/{id}/client',
             controller: NegotiationResponseClientController::class,
-            name: 'negociation_response_client'
+            name: 'negociation_client'
+        ),
+        new Post(
+            uriTemplate: '/negociations',
+            controller: NegotiationCreateController::class,
+            name: 'negociation'
         ),
         new Patch(
             uriTemplate: '/negotiation/room/available/{id}',
